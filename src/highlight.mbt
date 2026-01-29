@@ -208,6 +208,194 @@ pub fn escape_html_slice_to(
   }
 }
 
+// =============================================================================
+// Line Cache for Incremental Highlighting
+// =============================================================================
+
+///|
+/// Line-based cache for incremental syntax highlighting
+/// Works with any language by accepting a highlight function
+pub(all) struct LineCache {
+  /// Highlight tokens grouped by line
+  lines : Array[Array[HighlightToken]]
+  /// Start position of each line in source
+  mut line_starts : Array[Int]
+  /// Source text
+  mut source : String
+}
+
+///|
+/// Create a new line cache from source
+pub fn LineCache::new(
+  source : String,
+  highlight_fn : (String) -> Array[HighlightToken],
+) -> LineCache {
+  let cache : LineCache = { lines: [], line_starts: [], source }
+  cache.build_full(highlight_fn)
+  cache
+}
+
+///|
+/// Build line starts array from source
+fn LineCache::compute_line_starts(source : String) -> Array[Int] {
+  let starts : Array[Int] = [0] // First line starts at 0
+  let chars = source.to_array()
+  for i, c in chars {
+    if c == '\n' && i + 1 < chars.length() {
+      starts.push(i + 1)
+    }
+  }
+  starts
+}
+
+///|
+/// Find which line a position belongs to (binary search)
+fn LineCache::find_line(self : LineCache, pos : Int) -> Int {
+  let starts = self.line_starts
+  let mut low = 0
+  let mut high = starts.length() - 1
+  while low < high {
+    let mid = (low + high + 1) / 2
+    if starts[mid] <= pos {
+      low = mid
+    } else {
+      high = mid - 1
+    }
+  }
+  low
+}
+
+///|
+/// Build the full cache
+fn LineCache::build_full(
+  self : LineCache,
+  highlight_fn : (String) -> Array[HighlightToken],
+) -> Unit {
+  self.lines.clear()
+  self.line_starts = LineCache::compute_line_starts(self.source)
+  let num_lines = self.line_starts.length()
+
+  // Initialize empty lines
+  for i = 0; i < num_lines; i = i + 1 {
+    self.lines.push([])
+  }
+
+  // Tokenize and distribute to lines
+  let tokens = highlight_fn(self.source)
+  for token in tokens {
+    let line = self.find_line(token.from)
+    if line < self.lines.length() {
+      self.lines[line].push(token)
+    }
+  }
+}
+
+///|
+/// Get all tokens flattened
+pub fn LineCache::all_tokens(self : LineCache) -> Array[HighlightToken] {
+  let result : Array[HighlightToken] = []
+  for line in self.lines {
+    for token in line {
+      result.push(token)
+    }
+  }
+  result
+}
+
+///|
+/// Get number of lines
+pub fn LineCache::line_count(self : LineCache) -> Int {
+  self.lines.length()
+}
+
+///|
+/// Get tokens for a specific line
+pub fn LineCache::get_line_tokens(
+  self : LineCache,
+  line : Int,
+) -> Array[HighlightToken] {
+  if line >= 0 && line < self.lines.length() {
+    self.lines[line]
+  } else {
+    []
+  }
+}
+
+///|
+/// Get source text
+pub fn LineCache::get_source(self : LineCache) -> String {
+  self.source
+}
+
+///|
+/// Update cache when source changes
+/// Re-tokenizes from the edited line onwards
+/// Returns the range of lines that were affected (start_line, end_line)
+pub fn LineCache::update(
+  self : LineCache,
+  new_source : String,
+  edit_line : Int,
+  highlight_fn : (String) -> Array[HighlightToken],
+) -> (Int, Int) {
+  self.source = new_source
+  let new_line_starts = LineCache::compute_line_starts(new_source)
+  let new_num_lines = new_line_starts.length()
+
+  // Determine the start position for re-tokenization
+  let start_line = if edit_line > 0 { edit_line - 1 } else { 0 }
+  let start_pos = if start_line < new_line_starts.length() {
+    new_line_starts[start_line]
+  } else {
+    0
+  }
+
+  // Re-tokenize the entire source (simpler and more reliable)
+  let tokens = highlight_fn(new_source)
+
+  // Rebuild line_starts
+  self.line_starts = new_line_starts
+
+  // Truncate lines to start_line
+  while self.lines.length() > start_line {
+    let _ = self.lines.pop()
+
+  }
+
+  // Add new empty lines
+  for i = self.lines.length(); i < new_num_lines; i = i + 1 {
+    self.lines.push([])
+  }
+
+  // Distribute tokens to lines (only from start_line onwards)
+  for token in tokens {
+    if token.from >= start_pos {
+      let line = self.find_line(token.from)
+      if line < self.lines.length() {
+        self.lines[line].push(token)
+      }
+    } else {
+      // Token before edit region - keep in its original line
+      let line = self.find_line(token.from)
+      if line < start_line && line < self.lines.length() {
+        // Already preserved, skip
+        ()
+      }
+    }
+  }
+  (start_line, new_num_lines)
+}
+
+///|
+/// Rebuild the entire cache with new source
+pub fn LineCache::rebuild(
+  self : LineCache,
+  new_source : String,
+  highlight_fn : (String) -> Array[HighlightToken],
+) -> Unit {
+  self.source = new_source
+  self.build_full(highlight_fn)
+}
+
 ///|
 /// Generate highlighted HTML from source and tokens
 /// Note: tokens are assumed to be already sorted by position (as produced by tokenizers)

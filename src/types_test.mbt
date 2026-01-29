@@ -414,3 +414,135 @@ test "Tree::iter visits in correct order" {
   assert_eq(names[2], "D")
   assert_eq(names[3], "C")
 }
+
+// =============================================================================
+// LineCache Tests
+// =============================================================================
+
+///|
+/// Simple mock highlighter for testing
+fn mock_highlight(source : String) -> Array[HighlightToken] {
+  let tokens : Array[HighlightToken] = []
+  let chars = source.to_array()
+  let mut i = 0
+  while i < chars.length() {
+    let c = chars[i]
+    if c >= 'a' && c <= 'z' {
+      let start = i
+      while i < chars.length() && chars[i] >= 'a' && chars[i] <= 'z' {
+        i += 1
+      }
+      tokens.push(HighlightToken::new(start, i, HighlightTag::Keyword))
+    } else if c >= '0' && c <= '9' {
+      let start = i
+      while i < chars.length() && chars[i] >= '0' && chars[i] <= '9' {
+        i += 1
+      }
+      tokens.push(HighlightToken::new(start, i, HighlightTag::Number))
+    } else {
+      i += 1
+    }
+  }
+  tokens
+}
+
+///|
+test "LineCache::new creates cache from source" {
+  let source = "foo bar\nbaz 123"
+  let cache = LineCache::new(source, mock_highlight)
+  assert_eq(cache.line_count(), 2)
+  assert_eq(cache.get_source(), source)
+}
+
+///|
+test "LineCache distributes tokens to lines" {
+  let source = "abc\n123\nxyz"
+  let cache = LineCache::new(source, mock_highlight)
+  assert_eq(cache.line_count(), 3)
+
+  // Line 0: "abc" -> one keyword token
+  let line0 = cache.get_line_tokens(0)
+  assert_eq(line0.length(), 1)
+  assert_eq(line0[0].tag, HighlightTag::Keyword)
+
+  // Line 1: "123" -> one number token
+  let line1 = cache.get_line_tokens(1)
+  assert_eq(line1.length(), 1)
+  assert_eq(line1[0].tag, HighlightTag::Number)
+
+  // Line 2: "xyz" -> one keyword token
+  let line2 = cache.get_line_tokens(2)
+  assert_eq(line2.length(), 1)
+  assert_eq(line2[0].tag, HighlightTag::Keyword)
+}
+
+///|
+test "LineCache::all_tokens returns flattened tokens" {
+  let source = "abc 123"
+  let cache = LineCache::new(source, mock_highlight)
+  let all = cache.all_tokens()
+  assert_eq(all.length(), 2)
+}
+
+///|
+test "LineCache::get_line_tokens returns empty for invalid line" {
+  let source = "test"
+  let cache = LineCache::new(source, mock_highlight)
+  assert_eq(cache.get_line_tokens(-1).length(), 0)
+  assert_eq(cache.get_line_tokens(100).length(), 0)
+}
+
+///|
+test "LineCache handles empty source" {
+  let source = ""
+  let cache = LineCache::new(source, mock_highlight)
+  assert_eq(cache.line_count(), 1)
+  assert_eq(cache.get_line_tokens(0).length(), 0)
+}
+
+///|
+test "LineCache handles single line" {
+  let source = "hello world"
+  let cache = LineCache::new(source, mock_highlight)
+  assert_eq(cache.line_count(), 1)
+  let tokens = cache.get_line_tokens(0)
+  assert_eq(tokens.length(), 2) // "hello" and "world"
+}
+
+///|
+test "LineCache::update re-tokenizes from edit line" {
+  let source = "aaa\nbbb\nccc"
+  let cache = LineCache::new(source, mock_highlight)
+  assert_eq(cache.line_count(), 3)
+
+  // Update middle line
+  let new_source = "aaa\n123\nccc"
+  let (start, _end) = cache.update(new_source, 1, mock_highlight)
+  assert_eq(start, 0) // start_line is edit_line - 1 clamped to 0
+
+  // Line 1 should now have number token
+  let line1 = cache.get_line_tokens(1)
+  assert_eq(line1.length(), 1)
+  assert_eq(line1[0].tag, HighlightTag::Number)
+}
+
+///|
+test "LineCache::rebuild replaces entire cache" {
+  let source = "old"
+  let cache = LineCache::new(source, mock_highlight)
+  assert_eq(cache.line_count(), 1)
+  cache.rebuild("new\ndata", mock_highlight)
+  assert_eq(cache.line_count(), 2)
+  assert_eq(cache.get_source(), "new\ndata")
+}
+
+///|
+test "LineCache handles consecutive empty lines" {
+  let source = "a\n\n\nb"
+  let cache = LineCache::new(source, mock_highlight)
+  assert_eq(cache.line_count(), 4)
+  assert_eq(cache.get_line_tokens(0).length(), 1) // "a"
+  assert_eq(cache.get_line_tokens(1).length(), 0) // empty
+  assert_eq(cache.get_line_tokens(2).length(), 0) // empty
+  assert_eq(cache.get_line_tokens(3).length(), 1) // "b"
+}

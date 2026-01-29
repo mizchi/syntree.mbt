@@ -6,6 +6,14 @@ pub fn escape_html(String) -> String
 
 pub fn escape_html_slice_to(Array[Char], Int, Int, StringBuilder) -> Unit
 
+pub fn get_extensions_for_language(String) -> Array[String]
+
+pub fn get_language_for_ext(String) -> String?
+
+pub fn get_language_for_filename(String) -> String?
+
+pub fn supported_languages() -> Array[String]
+
 pub fn tokens_to_html(String, Array[HighlightToken]) -> String
 
 // Errors
@@ -59,6 +67,19 @@ pub fn Highlighter::add_rule(Self, String, HighlightTag) -> Unit
 pub fn Highlighter::get_tag(Self, String) -> HighlightTag
 pub fn Highlighter::highlight(Self, Tree) -> Array[HighlightToken]
 pub fn Highlighter::new() -> Self
+
+pub(all) struct LineCache {
+  lines : Array[Array[HighlightToken]]
+  mut line_starts : Array[Int]
+  mut source : String
+}
+pub fn LineCache::all_tokens(Self) -> Array[HighlightToken]
+pub fn LineCache::get_line_tokens(Self, Int) -> Array[HighlightToken]
+pub fn LineCache::get_source(Self) -> String
+pub fn LineCache::line_count(Self) -> Int
+pub fn LineCache::new(String, (String) -> Array[HighlightToken]) -> Self
+pub fn LineCache::rebuild(Self, String, (String) -> Array[HighlightToken]) -> Unit
+pub fn LineCache::update(Self, String, Int, (String) -> Array[HighlightToken]) -> (Int, Int)
 
 pub(all) struct NodeType {
   id : Int

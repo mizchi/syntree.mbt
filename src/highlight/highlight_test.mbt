@@ -799,9 +799,7 @@ test "highlight: all themes produce valid HTML" {
 ///|
 test "highlight: theme name appears in class" {
   let source = "let x = 1"
-  assert_true(
-    highlight_moonbit(source, github_dark()).contains("github-dark"),
-  )
+  assert_true(highlight_moonbit(source, github_dark()).contains("github-dark"))
   assert_true(
     highlight_moonbit(source, github_light()).contains("github-light"),
   )

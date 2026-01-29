@@ -1131,6 +1131,7 @@ fn TokenCache::tokenize_full(self : TokenCache) -> Unit {
   self.line_states.push(tokenizer.save_state())
   while true {
     let start_pos = tokenizer.position()
+    let before_state = tokenizer.save_state()
     match tokenizer.next_token() {
       Some(token) => {
         // Check if we crossed a line boundary
@@ -1138,20 +1139,33 @@ fn TokenCache::tokenize_full(self : TokenCache) -> Unit {
           start=token.from,
           end=token.to,
         )
-        if token_text.contains("\n") ||
-          (
-            start_pos > current_line_start &&
-            self.has_newline_between(current_line_start, token.from)
-          ) {
-          // Save current line and start new one
+        let newline_positions = if start_pos > current_line_start {
+          self.collect_newlines_between(current_line_start, token.from)
+        } else {
+          []
+        }
+        if token_text.contains("\n") {
+          newline_positions.append(
+            self.collect_newlines_between(token.from, token.to),
+          )
+        }
+        if newline_positions.length() > 0 {
+          // Save current line and start new ones
           self.lines.push(current_line_tokens)
           current_line_tokens = []
-          current_line_start = token.from
-          self.line_states.push({
-            pos: token.from,
-            context_stack: tokenizer.save_state().context_stack,
-            last_token: tokenizer.save_state().last_token,
-          })
+          for i, pos in newline_positions {
+            let line_start = pos + 1
+            self.line_states.push({
+              pos: line_start,
+              context_stack: before_state.context_stack,
+              last_token: before_state.last_token,
+            })
+            if i + 1 < newline_positions.length() {
+              self.lines.push([])
+            }
+          }
+          current_line_start = newline_positions.last().unwrap_or(token.from) +
+            1
         }
         current_line_tokens.push(token)
       }
@@ -1166,19 +1180,22 @@ fn TokenCache::tokenize_full(self : TokenCache) -> Unit {
 }
 
 ///|
-/// Check if there's a newline between two positions
-fn TokenCache::has_newline_between(
+/// Collect newline positions between two positions
+fn TokenCache::collect_newlines_between(
   self : TokenCache,
   from : Int,
   to : Int,
-) -> Bool {
+) -> Array[Int] {
   let chars = self.source.to_array()
-  for i = from; i < to && i < chars.length(); i = i + 1 {
+  let positions : Array[Int] = []
+  let start = if from < 0 { 0 } else { from }
+  let end = if to < chars.length() { to } else { chars.length() }
+  for i = start; i < end; i = i + 1 {
     if chars[i] == '\n' {
-      return true
+      positions.push(i)
     }
   }
-  false
+  positions
 }
 
 ///|
@@ -1239,8 +1256,11 @@ pub fn TokenCache::update(
   let new_lines : Array[Array[TsToken]] = []
   let new_states : Array[TokenizerState] = []
   let mut current_line_tokens : Array[TsToken] = []
+  let mut current_line_start = start_state.pos
   new_states.push(start_state)
   while true {
+    let start_pos = tokenizer.position()
+    let before_state = tokenizer.save_state()
     match tokenizer.next_token() {
       Some(token) => {
         let end_pos = if token.to > new_source.length() {
@@ -1252,10 +1272,32 @@ pub fn TokenCache::update(
           start=token.from,
           end=end_pos,
         )
+        let newline_positions = if start_pos > current_line_start {
+          self.collect_newlines_between(current_line_start, token.from)
+        } else {
+          []
+        }
         if token_text.contains("\n") {
+          newline_positions.append(
+            self.collect_newlines_between(token.from, token.to),
+          )
+        }
+        if newline_positions.length() > 0 {
           new_lines.push(current_line_tokens)
           current_line_tokens = []
-          new_states.push(tokenizer.save_state())
+          for i, pos in newline_positions {
+            let line_start = pos + 1
+            new_states.push({
+              pos: line_start,
+              context_stack: before_state.context_stack,
+              last_token: before_state.last_token,
+            })
+            if i + 1 < newline_positions.length() {
+              new_lines.push([])
+            }
+          }
+          current_line_start = newline_positions.last().unwrap_or(token.from) +
+            1
         }
         current_line_tokens.push(token)
       }

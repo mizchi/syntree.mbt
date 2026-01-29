@@ -359,10 +359,7 @@ fn write_line_content(
 
 ///|
 /// Highlight TypeScript code to HTML
-pub fn highlight_typescript(
-  source : String,
-  theme : HighlightTheme,
-) -> String {
+pub fn highlight_typescript(source : String, theme : HighlightTheme) -> String {
   let tokens = @typescript.highlight_typescript(source)
   tokens_to_html(source, tokens, theme)
 }
@@ -406,5 +403,75 @@ pub fn highlight_bash(source : String, theme : HighlightTheme) -> String {
 /// Highlight Rust to HTML
 pub fn highlight_rust(source : String, theme : HighlightTheme) -> String {
   let tokens = @rust.highlight_rust(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight YAML to HTML
+pub fn highlight_yaml(source : String, theme : HighlightTheme) -> String {
+  let tokens = @yaml.highlight_yaml(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight C to HTML
+pub fn highlight_c(source : String, theme : HighlightTheme) -> String {
+  let tokens = @c.highlight_c(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight Zig to HTML
+pub fn highlight_zig(source : String, theme : HighlightTheme) -> String {
+  let tokens = @zig.highlight_zig(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight Go to HTML
+pub fn highlight_go(source : String, theme : HighlightTheme) -> String {
+  let tokens = @go.highlight_go(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight Python to HTML
+pub fn highlight_python(source : String, theme : HighlightTheme) -> String {
+  let tokens = @python.highlight_python(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight TOML to HTML
+pub fn highlight_toml(source : String, theme : HighlightTheme) -> String {
+  let tokens = @toml.highlight_toml(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight SQL to HTML
+pub fn highlight_sql(source : String, theme : HighlightTheme) -> String {
+  let tokens = @sql.highlight_sql(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight OCaml to HTML
+pub fn highlight_ocaml(source : String, theme : HighlightTheme) -> String {
+  let tokens = @ocaml.highlight_ocaml(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight Swift to HTML
+pub fn highlight_swift(source : String, theme : HighlightTheme) -> String {
+  let tokens = @swift.highlight_swift(source)
+  tokens_to_html(source, tokens, theme)
+}
+
+///|
+/// Highlight Java to HTML
+pub fn highlight_java(source : String, theme : HighlightTheme) -> String {
+  let tokens = @java.highlight_java(source)
   tokens_to_html(source, tokens, theme)
 }

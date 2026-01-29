@@ -433,11 +433,15 @@ pub fn JsonParser::parse_value(self : JsonParser) -> @syntree.Tree? {
         BracketOpen => self.parse_array()
         String => {
           let _ = self.advance()
-          Some(@syntree.Tree::leaf(json_node_type(String), token.from, token.to))
+          Some(
+            @syntree.Tree::leaf(json_node_type(String), token.from, token.to),
+          )
         }
         Number => {
           let _ = self.advance()
-          Some(@syntree.Tree::leaf(json_node_type(Number), token.from, token.to))
+          Some(
+            @syntree.Tree::leaf(json_node_type(Number), token.from, token.to),
+          )
         }
         True => {
           let _ = self.advance()
@@ -467,7 +471,11 @@ pub fn JsonParser::parse_object(self : JsonParser) -> @syntree.Tree? {
 
   // Add opening brace as child
   children.push(
-    @syntree.Tree::leaf(json_node_type(BraceOpen), open_token.from, open_token.to),
+    @syntree.Tree::leaf(
+      json_node_type(BraceOpen),
+      open_token.from,
+      open_token.to,
+    ),
   )
 
   // Parse properties

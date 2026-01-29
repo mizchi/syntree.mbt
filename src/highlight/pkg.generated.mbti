@@ -12,17 +12,37 @@ pub fn github_light() -> HighlightTheme
 
 pub fn highlight_bash(String, HighlightTheme) -> String
 
+pub fn highlight_c(String, HighlightTheme) -> String
+
 pub fn highlight_css(String, HighlightTheme) -> String
 
+pub fn highlight_go(String, HighlightTheme) -> String
+
 pub fn highlight_html(String, HighlightTheme) -> String
+
+pub fn highlight_java(String, HighlightTheme) -> String
 
 pub fn highlight_json(String, HighlightTheme) -> String
 
 pub fn highlight_moonbit(String, HighlightTheme) -> String
 
+pub fn highlight_ocaml(String, HighlightTheme) -> String
+
+pub fn highlight_python(String, HighlightTheme) -> String
+
 pub fn highlight_rust(String, HighlightTheme) -> String
 
+pub fn highlight_sql(String, HighlightTheme) -> String
+
+pub fn highlight_swift(String, HighlightTheme) -> String
+
+pub fn highlight_toml(String, HighlightTheme) -> String
+
 pub fn highlight_typescript(String, HighlightTheme) -> String
+
+pub fn highlight_yaml(String, HighlightTheme) -> String
+
+pub fn highlight_zig(String, HighlightTheme) -> String
 
 pub fn one_dark_pro() -> HighlightTheme
 
