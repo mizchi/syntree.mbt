@@ -1,1 +1,1 @@
-import { "mizchi/syntree/lezer" }
+import { "mizchi/syntree.mbt/lezer" }

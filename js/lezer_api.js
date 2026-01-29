@@ -1,5 +1,5 @@
 /**
- * @mizchi/syntree - Syntax highlighting API wrapper
+ * @mizchi/syntree.mbt - Syntax highlighting API wrapper
  *
  * Provides syntax highlighting for multiple languages.
  */
