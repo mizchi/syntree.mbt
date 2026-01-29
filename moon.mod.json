@@ -11,8 +11,7 @@
     "syntax",
     "tree",
     "highlight",
-    "lezer",
     "moonbit"
   ],
-  "description": "Lezer-inspired incremental syntax tree and highlighting toolkit for MoonBit"
+  "description": "Incremental syntax tree and highlighting toolkit for MoonBit"
 }

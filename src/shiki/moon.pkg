@@ -1,0 +1,10 @@
+import {
+  "mizchi/syntree",
+  "mizchi/syntree/typescript",
+  "mizchi/syntree/moonbit",
+  "mizchi/syntree/json",
+  "mizchi/syntree/html",
+  "mizchi/syntree/css",
+  "mizchi/syntree/bash",
+  "mizchi/syntree/rust",
+}
