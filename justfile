@@ -22,9 +22,9 @@ test:
 test-update:
     moon test --update --target {{target}}
 
-# Run main
-run:
-    moon run src/main --target {{target}}
+# Run benchmarks
+bench:
+    moon bench --target {{target}}
 
 # Generate type definition files
 info:
