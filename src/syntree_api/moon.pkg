@@ -1,4 +1,4 @@
-import { "mizchi/syntree/shiki" }
+import { "mizchi/syntree/highlight" }
 
 options(
   link: {

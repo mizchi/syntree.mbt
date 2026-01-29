@@ -1,10 +1,10 @@
-///| Shiki-compatible syntax highlighting output
+///| Syntax highlighting HTML output
 
 ///|
 
-///| Generates HTML output compatible with Shiki's format:
+///| Generates HTML output with inline color styles:
 
-///| - `<pre class="shiki" style="background-color: ..."><code>`
+///| - `<pre class="highlight" style="background-color: ..."><code>`
 
 ///| - `<span class="line">` for each line
 
@@ -16,7 +16,7 @@
 
 ///|
 /// A syntax highlighting theme with colors for each token type
-pub(all) struct ShikiTheme {
+pub(all) struct HighlightTheme {
   /// Theme name (e.g., "github-dark", "vitesse-light")
   name : String
   /// Background color (e.g., "#0d1117")
@@ -65,8 +65,8 @@ pub(all) struct ShikiTheme {
 
 ///|
 /// Get color for a highlight tag from theme
-pub fn ShikiTheme::get_color(
-  self : ShikiTheme,
+pub fn HighlightTheme::get_color(
+  self : HighlightTheme,
   tag : @syntree.HighlightTag,
 ) -> String {
   match tag {
@@ -103,7 +103,7 @@ pub fn ShikiTheme::get_color(
 
 ///|
 /// GitHub Dark theme (similar to github-dark)
-pub fn github_dark() -> ShikiTheme {
+pub fn github_dark() -> HighlightTheme {
   {
     name: "github-dark",
     background: "#0d1117",
@@ -132,7 +132,7 @@ pub fn github_dark() -> ShikiTheme {
 
 ///|
 /// GitHub Light theme (similar to github-light)
-pub fn github_light() -> ShikiTheme {
+pub fn github_light() -> HighlightTheme {
   {
     name: "github-light",
     background: "#ffffff",
@@ -161,7 +161,7 @@ pub fn github_light() -> ShikiTheme {
 
 ///|
 /// One Dark Pro theme (similar to VS Code One Dark Pro)
-pub fn one_dark_pro() -> ShikiTheme {
+pub fn one_dark_pro() -> HighlightTheme {
   {
     name: "one-dark-pro",
     background: "#282c34",
@@ -190,7 +190,7 @@ pub fn one_dark_pro() -> ShikiTheme {
 
 ///|
 /// Vitesse Dark theme
-pub fn vitesse_dark() -> ShikiTheme {
+pub fn vitesse_dark() -> HighlightTheme {
   {
     name: "vitesse-dark",
     background: "#121212",
@@ -218,30 +218,30 @@ pub fn vitesse_dark() -> ShikiTheme {
 }
 
 // =============================================================================
-// Shiki HTML Generation
+// Highlight HTML Generation
 // =============================================================================
 
 ///|
-/// A positioned token with highlight information
-priv struct ShikiToken {
+/// A positioned token with color information
+priv struct ColoredToken {
   from : Int
   to : Int
   color : String
 }
 
 ///|
-/// Generate Shiki-compatible HTML from source and highlight tokens
-pub fn tokens_to_shiki_html(
+/// Generate HTML from source and highlight tokens
+pub fn tokens_to_html(
   source : String,
   tokens : Array[@syntree.HighlightToken],
-  theme : ShikiTheme,
+  theme : HighlightTheme,
 ) -> String {
   let result = StringBuilder::new()
   let chars = source.to_array()
   let len = chars.length()
 
   // Write opening pre/code tags
-  result.write_string("<pre class=\"shiki ")
+  result.write_string("<pre class=\"highlight ")
   result.write_string(theme.name)
   result.write_string("\" style=\"background-color: ")
   result.write_string(theme.background)
@@ -250,7 +250,7 @@ pub fn tokens_to_shiki_html(
   result.write_string("\"><code>")
 
   // Convert tokens to positioned colored tokens
-  let colored_tokens : Array[ShikiToken] = []
+  let colored_tokens : Array[ColoredToken] = []
   for token in tokens {
     let color = theme.get_color(token.tag)
     colored_tokens.push({ from: token.from, to: token.to, color })
@@ -299,7 +299,7 @@ fn write_line_content(
   chars : Array[Char],
   line_start : Int,
   line_end : Int,
-  tokens : Array[ShikiToken],
+  tokens : Array[ColoredToken],
   default_color : String,
 ) -> Unit {
   let mut pos = line_start
@@ -358,53 +358,53 @@ fn write_line_content(
 // =============================================================================
 
 ///|
-/// Highlight TypeScript code to Shiki-compatible HTML
-pub fn highlight_typescript_shiki(
+/// Highlight TypeScript code to HTML
+pub fn highlight_typescript(
   source : String,
-  theme : ShikiTheme,
+  theme : HighlightTheme,
 ) -> String {
   let tokens = @typescript.highlight_typescript(source)
-  tokens_to_shiki_html(source, tokens, theme)
+  tokens_to_html(source, tokens, theme)
 }
 
 ///|
-/// Highlight MoonBit code to Shiki-compatible HTML
-pub fn highlight_moonbit_shiki(source : String, theme : ShikiTheme) -> String {
+/// Highlight MoonBit code to HTML
+pub fn highlight_moonbit(source : String, theme : HighlightTheme) -> String {
   let tokens = @moonbit.highlight_moonbit(source)
-  tokens_to_shiki_html(source, tokens, theme)
+  tokens_to_html(source, tokens, theme)
 }
 
 ///|
-/// Highlight JSON to Shiki-compatible HTML
-pub fn highlight_json_shiki(source : String, theme : ShikiTheme) -> String {
+/// Highlight JSON to HTML
+pub fn highlight_json(source : String, theme : HighlightTheme) -> String {
   let tokens = @json.highlight_json(source)
-  tokens_to_shiki_html(source, tokens, theme)
+  tokens_to_html(source, tokens, theme)
 }
 
 ///|
-/// Highlight HTML to Shiki-compatible HTML
-pub fn highlight_html_shiki(source : String, theme : ShikiTheme) -> String {
+/// Highlight HTML to HTML
+pub fn highlight_html(source : String, theme : HighlightTheme) -> String {
   let tokens = @html.highlight_html(source)
-  tokens_to_shiki_html(source, tokens, theme)
+  tokens_to_html(source, tokens, theme)
 }
 
 ///|
-/// Highlight CSS to Shiki-compatible HTML
-pub fn highlight_css_shiki(source : String, theme : ShikiTheme) -> String {
+/// Highlight CSS to HTML
+pub fn highlight_css(source : String, theme : HighlightTheme) -> String {
   let tokens = @css.highlight_css(source)
-  tokens_to_shiki_html(source, tokens, theme)
+  tokens_to_html(source, tokens, theme)
 }
 
 ///|
-/// Highlight Bash to Shiki-compatible HTML
-pub fn highlight_bash_shiki(source : String, theme : ShikiTheme) -> String {
+/// Highlight Bash to HTML
+pub fn highlight_bash(source : String, theme : HighlightTheme) -> String {
   let tokens = @bash.highlight_bash(source)
-  tokens_to_shiki_html(source, tokens, theme)
+  tokens_to_html(source, tokens, theme)
 }
 
 ///|
-/// Highlight Rust to Shiki-compatible HTML
-pub fn highlight_rust_shiki(source : String, theme : ShikiTheme) -> String {
+/// Highlight Rust to HTML
+pub fn highlight_rust(source : String, theme : HighlightTheme) -> String {
   let tokens = @rust.highlight_rust(source)
-  tokens_to_shiki_html(source, tokens, theme)
+  tokens_to_html(source, tokens, theme)
 }

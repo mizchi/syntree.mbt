@@ -6,7 +6,7 @@ Incremental syntax tree and highlighting toolkit for MoonBit.
 
 - `mizchi/syntree` - core tree, cursor, and highlight APIs
 - `mizchi/syntree/<lang>` - language tokenizers + highlighters (typescript, moonbit, json, html, css, bash, rust, mdx)
-- `mizchi/syntree/shiki` - Shiki-style HTML rendering
+- `mizchi/syntree/highlight` - HTML rendering with inline styles
 - `mizchi/syntree/syntree_api` - JS exports for the bundled highlighters
 
 ## JS usage

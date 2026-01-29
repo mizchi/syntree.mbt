@@ -1,5 +1,5 @@
 ///|
-/// Shiki HTML generation tests
+/// Highlight HTML generation tests
 
 // =============================================================================
 // Theme Tests
@@ -100,12 +100,12 @@ test "theme: vitesse_dark has correct background" {
 // =============================================================================
 
 ///|
-test "shiki: simple JavaScript produces valid HTML" {
+test "highlight: simple JavaScript produces valid HTML" {
   let source = "const x = 42;"
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
 
-  // Check for shiki class
-  assert_true(html.contains("<pre class=\"shiki github-dark\""))
+  // Check for highlight class
+  assert_true(html.contains("<pre class=\"highlight github-dark\""))
 
   // Check for background color
   assert_true(html.contains("background-color: #0d1117"))
@@ -119,11 +119,11 @@ test "shiki: simple JavaScript produces valid HTML" {
 }
 
 ///|
-test "shiki: multiline code produces multiple lines" {
+test "highlight: multiline code produces multiple lines" {
   let source =
     #|const a = 1;
     #|const b = 2;
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
 
   // Should have multiple line spans
   let line_count = count_occurrences(html, "<span class=\"line\">")
@@ -131,31 +131,31 @@ test "shiki: multiline code produces multiple lines" {
 }
 
 ///|
-test "shiki: MoonBit code highlights correctly" {
+test "highlight: MoonBit code highlights correctly" {
   let source = "fn main() -> Int { 42 }"
-  let html = highlight_moonbit_shiki(source, github_dark())
+  let html = highlight_moonbit(source, github_dark())
 
-  // Check for shiki structure
-  assert_true(html.contains("<pre class=\"shiki"))
+  // Check for highlight structure
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("<code>"))
   assert_true(html.contains("<span class=\"line\">"))
 }
 
 ///|
-test "shiki: JSON highlights correctly" {
+test "highlight: JSON highlights correctly" {
   let source = "{\"key\": 123}"
-  let html = highlight_json_shiki(source, github_dark())
+  let html = highlight_json(source, github_dark())
 
-  // Check for shiki structure
-  assert_true(html.contains("<pre class=\"shiki"))
+  // Check for highlight structure
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("<code>"))
 }
 
 ///|
-test "shiki: different themes produce different colors" {
+test "highlight: different themes produce different colors" {
   let source = "const x = 42;"
-  let dark = highlight_typescript_shiki(source, github_dark())
-  let light = highlight_typescript_shiki(source, github_light())
+  let dark = highlight_typescript(source, github_dark())
+  let light = highlight_typescript(source, github_light())
 
   // Background colors should be different
   assert_true(dark.contains("#0d1117"))
@@ -163,9 +163,9 @@ test "shiki: different themes produce different colors" {
 }
 
 ///|
-test "shiki: HTML special chars are escaped" {
+test "highlight: HTML special chars are escaped" {
   let source = "const x = '<div>';"
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
 
   // < and > should be escaped
   assert_true(html.contains("&lt;"))
@@ -176,19 +176,19 @@ test "shiki: HTML special chars are escaped" {
 }
 
 ///|
-test "shiki: empty source produces valid HTML" {
+test "highlight: empty source produces valid HTML" {
   let source = ""
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
 
   // Should still have valid structure
-  assert_true(html.contains("<pre class=\"shiki"))
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("</code></pre>"))
 }
 
 ///|
-test "shiki: token colors are applied" {
+test "highlight: token colors are applied" {
   let source = "const x = 42;"
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
 
   // Should have colored spans
   assert_true(html.contains("style=\"color:"))
@@ -199,22 +199,22 @@ test "shiki: token colors are applied" {
 // =============================================================================
 
 ///|
-test "shiki/ts: function declaration" {
+test "highlight/ts: function declaration" {
   let source = "function greet(name: string): void {}"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("<span class=\"line\">"))
 }
 
 ///|
-test "shiki/ts: arrow function" {
+test "highlight/ts: arrow function" {
   let source = "const add = (a: number, b: number) => a + b;"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/ts: class declaration" {
+test "highlight/ts: class declaration" {
   let source =
     #|class Person {
     #|  name: string;
@@ -222,39 +222,39 @@ test "shiki/ts: class declaration" {
     #|    this.name = name;
     #|  }
     #|}
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
   let line_count = count_occurrences(html, "<span class=\"line\">")
   assert_true(line_count >= 5)
 }
 
 ///|
-test "shiki/ts: template literal" {
+test "highlight/ts: template literal" {
   let source = "const msg = `Hello, ${name}!`;"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/ts: JSX element" {
+test "highlight/ts: JSX element" {
   let source = "const el = <div className=\"container\">Hello</div>;"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   // < should be escaped in the output
   assert_true(html.contains("&lt;"))
 }
 
 ///|
-test "shiki/ts: import statement" {
+test "highlight/ts: import statement" {
   let source = "import { useState } from 'react';"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/ts: async/await" {
+test "highlight/ts: async/await" {
   let source = "async function fetch() { await getData(); }"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 // =============================================================================
@@ -262,79 +262,79 @@ test "shiki/ts: async/await" {
 // =============================================================================
 
 ///|
-test "shiki/mbt: function definition" {
+test "highlight/mbt: function definition" {
   let source = "fn add(a : Int, b : Int) -> Int { a + b }"
-  let html = highlight_moonbit_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_moonbit(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("<span class=\"line\">"))
 }
 
 ///|
-test "shiki/mbt: struct definition" {
+test "highlight/mbt: struct definition" {
   let source =
     #|struct Point {
     #|  x : Int
     #|  y : Int
     #|}
-  let html = highlight_moonbit_shiki(source, github_dark())
+  let html = highlight_moonbit(source, github_dark())
   let line_count = count_occurrences(html, "<span class=\"line\">")
   assert_true(line_count >= 4)
 }
 
 ///|
-test "shiki/mbt: enum definition" {
+test "highlight/mbt: enum definition" {
   let source =
     #|enum Option[T] {
     #|  Some(T)
     #|  None
     #|}
-  let html = highlight_moonbit_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_moonbit(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/mbt: pattern matching" {
+test "highlight/mbt: pattern matching" {
   let source =
     #|match x {
     #|  Some(v) => v
     #|  None => 0
     #|}
-  let html = highlight_moonbit_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_moonbit(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/mbt: string interpolation" {
+test "highlight/mbt: string interpolation" {
   let source = "let msg = \"value: \\{x}\""
-  let html = highlight_moonbit_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_moonbit(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/mbt: raw string" {
+test "highlight/mbt: raw string" {
   let source =
     #|let code =
     #|  #|fn main() {
     #|  #|  println("Hello")
     #|  #|}
-  let html = highlight_moonbit_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_moonbit(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/mbt: doc comment" {
+test "highlight/mbt: doc comment" {
   let source =
     #|///| This is a doc comment
     #|fn documented() -> Unit {}
-  let html = highlight_moonbit_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_moonbit(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/mbt: type annotation" {
+test "highlight/mbt: type annotation" {
   let source = "let x : Array[Int] = []"
-  let html = highlight_moonbit_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_moonbit(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 // =============================================================================
@@ -342,14 +342,14 @@ test "shiki/mbt: type annotation" {
 // =============================================================================
 
 ///|
-test "shiki/json: simple object" {
+test "highlight/json: simple object" {
   let source = "{\"name\": \"Alice\", \"age\": 30}"
-  let html = highlight_json_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_json(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/json: nested object" {
+test "highlight/json: nested object" {
   let source =
     #|{
     #|  "person": {
@@ -359,23 +359,23 @@ test "shiki/json: nested object" {
     #|    }
     #|  }
     #|}
-  let html = highlight_json_shiki(source, github_dark())
+  let html = highlight_json(source, github_dark())
   let line_count = count_occurrences(html, "<span class=\"line\">")
   assert_true(line_count >= 7)
 }
 
 ///|
-test "shiki/json: array" {
+test "highlight/json: array" {
   let source = "[1, 2, 3, \"four\", true, null]"
-  let html = highlight_json_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_json(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/json: boolean and null" {
+test "highlight/json: boolean and null" {
   let source = "{\"active\": true, \"deleted\": false, \"data\": null}"
-  let html = highlight_json_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_json(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 // =============================================================================
@@ -383,29 +383,29 @@ test "shiki/json: boolean and null" {
 // =============================================================================
 
 ///|
-test "shiki/html: simple div" {
+test "highlight/html: simple div" {
   let source = "<div>Hello</div>"
-  let html = highlight_html_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_html(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("<span class=\"line\">"))
 }
 
 ///|
-test "shiki/html: with attributes" {
+test "highlight/html: with attributes" {
   let source = "<div class=\"container\" id=\"main\">Content</div>"
-  let html = highlight_html_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_html(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/html: self-closing tag" {
+test "highlight/html: self-closing tag" {
   let source = "<img src=\"image.png\" alt=\"An image\" />"
-  let html = highlight_html_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_html(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/html: nested tags" {
+test "highlight/html: nested tags" {
   let source =
     #|<html>
     #|  <head>
@@ -415,29 +415,29 @@ test "shiki/html: nested tags" {
     #|    <h1>Hello</h1>
     #|  </body>
     #|</html>
-  let html = highlight_html_shiki(source, github_dark())
+  let html = highlight_html(source, github_dark())
   let line_count = count_occurrences(html, "<span class=\"line\">")
   assert_true(line_count >= 8)
 }
 
 ///|
-test "shiki/html: comment" {
+test "highlight/html: comment" {
   let source = "<!-- This is a comment -->"
-  let html = highlight_html_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_html(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/html: doctype" {
+test "highlight/html: doctype" {
   let source = "<!DOCTYPE html>"
-  let html = highlight_html_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_html(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/html: escapes angle brackets" {
+test "highlight/html: escapes angle brackets" {
   let source = "<div>"
-  let html = highlight_html_shiki(source, github_dark())
+  let html = highlight_html(source, github_dark())
 
   // Source < and > should be escaped in output
   assert_true(html.contains("&lt;"))
@@ -445,14 +445,14 @@ test "shiki/html: escapes angle brackets" {
 }
 
 ///|
-test "shiki/html: form with inputs" {
+test "highlight/html: form with inputs" {
   let source =
     #|<form action="/submit" method="post">
     #|  <input type="text" name="username" required>
     #|  <button type="submit">Submit</button>
     #|</form>
-  let html = highlight_html_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_html(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 // =============================================================================
@@ -460,75 +460,75 @@ test "shiki/html: form with inputs" {
 // =============================================================================
 
 ///|
-test "shiki/css: simple rule" {
+test "highlight/css: simple rule" {
   let source = ".container { color: red; }"
-  let html = highlight_css_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_css(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("<span class=\"line\">"))
 }
 
 ///|
-test "shiki/css: multiple properties" {
+test "highlight/css: multiple properties" {
   let source =
     #|.box {
     #|  width: 100px;
     #|  height: 50px;
     #|  background-color: #f0f0f0;
     #|}
-  let html = highlight_css_shiki(source, github_dark())
+  let html = highlight_css(source, github_dark())
   let line_count = count_occurrences(html, "<span class=\"line\">")
   assert_true(line_count >= 5)
 }
 
 ///|
-test "shiki/css: selectors" {
+test "highlight/css: selectors" {
   let source = "div.container > p:first-child::before {}"
-  let html = highlight_css_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_css(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/css: media query" {
+test "highlight/css: media query" {
   let source =
     #|@media (max-width: 768px) {
     #|  .container {
     #|    width: 100%;
     #|  }
     #|}
-  let html = highlight_css_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_css(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/css: keyframes" {
+test "highlight/css: keyframes" {
   let source =
     #|@keyframes fade {
     #|  from { opacity: 0; }
     #|  to { opacity: 1; }
     #|}
-  let html = highlight_css_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_css(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/css: color values" {
+test "highlight/css: color values" {
   let source = ".foo { color: #ff0000; background: rgb(255, 255, 255); }"
-  let html = highlight_css_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_css(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/css: url value" {
+test "highlight/css: url value" {
   let source = ".bg { background-image: url('image.png'); }"
-  let html = highlight_css_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_css(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/css: comment" {
+test "highlight/css: comment" {
   let source = "/* This is a CSS comment */ .foo {}"
-  let html = highlight_css_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_css(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 // =============================================================================
@@ -536,89 +536,89 @@ test "shiki/css: comment" {
 // =============================================================================
 
 ///|
-test "shiki/bash: simple command" {
+test "highlight/bash: simple command" {
   let source = "echo hello world"
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("<span class=\"line\">"))
 }
 
 ///|
-test "shiki/bash: command with pipe" {
+test "highlight/bash: command with pipe" {
   let source = "cat file.txt | grep pattern | wc -l"
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/bash: script with shebang" {
+test "highlight/bash: script with shebang" {
   let source =
     #|#!/bin/bash
     #|echo "Hello World"
     #|exit 0
-  let html = highlight_bash_shiki(source, github_dark())
+  let html = highlight_bash(source, github_dark())
   let line_count = count_occurrences(html, "<span class=\"line\">")
   assert_true(line_count >= 3)
 }
 
 ///|
-test "shiki/bash: if statement" {
+test "highlight/bash: if statement" {
   let source =
     #|if [ -f file.txt ]; then
     #|  echo "File exists"
     #|else
     #|  echo "File not found"
     #|fi
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/bash: for loop" {
+test "highlight/bash: for loop" {
   let source =
     #|for i in 1 2 3; do
     #|  echo $i
     #|done
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/bash: variables" {
+test "highlight/bash: variables" {
   let source = "NAME=\"John\"\necho $NAME\necho ${HOME}"
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/bash: command substitution" {
+test "highlight/bash: command substitution" {
   let source = "DATE=$(date +%Y-%m-%d)\necho \"Today is $DATE\""
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/bash: redirect and background" {
+test "highlight/bash: redirect and background" {
   let source = "command > output.txt 2>&1 &"
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/bash: function definition" {
+test "highlight/bash: function definition" {
   let source =
     #|function greet() {
     #|  echo "Hello, $1!"
     #|}
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/bash: comment" {
+test "highlight/bash: comment" {
   let source = "# This is a comment\necho test  # inline comment"
-  let html = highlight_bash_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_bash(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 // =============================================================================
@@ -626,92 +626,92 @@ test "shiki/bash: comment" {
 // =============================================================================
 
 ///|
-test "shiki/rust: simple function" {
+test "highlight/rust: simple function" {
   let source = "fn main() { println!(\"Hello\"); }"
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("<span class=\"line\">"))
 }
 
 ///|
-test "shiki/rust: struct definition" {
+test "highlight/rust: struct definition" {
   let source =
     #|struct Point {
     #|    x: f64,
     #|    y: f64,
     #|}
-  let html = highlight_rust_shiki(source, github_dark())
+  let html = highlight_rust(source, github_dark())
   let line_count = count_occurrences(html, "<span class=\"line\">")
   assert_true(line_count >= 4)
 }
 
 ///|
-test "shiki/rust: enum definition" {
+test "highlight/rust: enum definition" {
   let source =
     #|enum Option<T> {
     #|    Some(T),
     #|    None,
     #|}
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/rust: impl block" {
+test "highlight/rust: impl block" {
   let source =
     #|impl Point {
     #|    fn new(x: f64, y: f64) -> Self {
     #|        Point { x, y }
     #|    }
     #|}
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/rust: match expression" {
+test "highlight/rust: match expression" {
   let source =
     #|match value {
     #|    Some(v) => v,
     #|    None => 0,
     #|}
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/rust: lifetimes" {
+test "highlight/rust: lifetimes" {
   let source = "fn longest<'a>(x: &'a str, y: &'a str) -> &'a str { x }"
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/rust: macros" {
+test "highlight/rust: macros" {
   let source = "let v = vec![1, 2, 3];\nprintln!(\"{:?}\", v);"
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/rust: attributes" {
+test "highlight/rust: attributes" {
   let source = "#[derive(Debug, Clone)]\nstruct Data { value: i32 }"
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/rust: doc comment" {
+test "highlight/rust: doc comment" {
   let source = "/// This is a doc comment\nfn documented() {}"
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki/rust: use statement" {
+test "highlight/rust: use statement" {
   let source = "use std::collections::HashMap;"
-  let html = highlight_rust_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_rust(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 // =============================================================================
@@ -719,65 +719,65 @@ test "shiki/rust: use statement" {
 // =============================================================================
 
 ///|
-test "shiki: single character" {
+test "highlight: single character" {
   let source = "x"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("</code></pre>"))
 }
 
 ///|
-test "shiki: only whitespace" {
+test "highlight: only whitespace" {
   let source = "   "
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki: only newlines" {
+test "highlight: only newlines" {
   let source = "\n\n\n"
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
   let line_count = count_occurrences(html, "<span class=\"line\">")
   assert_true(line_count >= 3)
 }
 
 ///|
-test "shiki: ampersand escaping" {
+test "highlight: ampersand escaping" {
   let source = "const x = 'a & b';"
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
   assert_true(html.contains("&amp;"))
 }
 
 ///|
-test "shiki: quote escaping" {
+test "highlight: quote escaping" {
   let source = "const x = \"he said \\\"hello\\\"\";"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
 }
 
 ///|
-test "shiki: very long line" {
+test "highlight: very long line" {
   let mut source = "const x = \""
   for i = 0; i < 100; i = i + 1 {
     source = source + "a"
   }
   source = source + "\";"
-  let html = highlight_typescript_shiki(source, github_dark())
-  assert_true(html.contains("<pre class=\"shiki"))
+  let html = highlight_typescript(source, github_dark())
+  assert_true(html.contains("<pre class=\"highlight"))
   assert_true(html.contains("</code></pre>"))
 }
 
 ///|
-test "shiki: unicode characters" {
+test "highlight: unicode characters" {
   let source = "const greeting = \"こんにちは世界\";"
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
   assert_true(html.contains("こんにちは世界"))
 }
 
 ///|
-test "shiki: emoji" {
+test "highlight: emoji" {
   let source = "const emoji = \"🎉🚀\";"
-  let html = highlight_typescript_shiki(source, github_dark())
+  let html = highlight_typescript(source, github_dark())
   assert_true(html.contains("🎉🚀"))
 }
 
@@ -786,30 +786,30 @@ test "shiki: emoji" {
 // =============================================================================
 
 ///|
-test "shiki: all themes produce valid HTML" {
+test "highlight: all themes produce valid HTML" {
   let source = "const x = 42;"
   let themes = [github_dark(), github_light(), one_dark_pro(), vitesse_dark()]
   for theme in themes {
-    let html = highlight_typescript_shiki(source, theme)
-    assert_true(html.contains("<pre class=\"shiki"))
+    let html = highlight_typescript(source, theme)
+    assert_true(html.contains("<pre class=\"highlight"))
     assert_true(html.contains("</code></pre>"))
   }
 }
 
 ///|
-test "shiki: theme name appears in class" {
+test "highlight: theme name appears in class" {
   let source = "let x = 1"
   assert_true(
-    highlight_moonbit_shiki(source, github_dark()).contains("github-dark"),
+    highlight_moonbit(source, github_dark()).contains("github-dark"),
   )
   assert_true(
-    highlight_moonbit_shiki(source, github_light()).contains("github-light"),
+    highlight_moonbit(source, github_light()).contains("github-light"),
   )
   assert_true(
-    highlight_moonbit_shiki(source, one_dark_pro()).contains("one-dark-pro"),
+    highlight_moonbit(source, one_dark_pro()).contains("one-dark-pro"),
   )
   assert_true(
-    highlight_moonbit_shiki(source, vitesse_dark()).contains("vitesse-dark"),
+    highlight_moonbit(source, vitesse_dark()).contains("vitesse-dark"),
   )
 }
 
