@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "mizchi/syntree.mbt/lezer"
+package "mizchi/syntree/lezer"
 
 // Values
 pub fn escape_html(String) -> String

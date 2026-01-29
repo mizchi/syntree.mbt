@@ -1,4 +1,4 @@
-import { "mizchi/syntree.mbt/lezer/shiki" }
+import { "mizchi/syntree/lezer/shiki" }
 
 options(
   link: {

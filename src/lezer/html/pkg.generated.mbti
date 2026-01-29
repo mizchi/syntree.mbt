@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "mizchi/syntree.mbt/lezer/html"
+package "mizchi/syntree/lezer/html"
 
 import {
-  "mizchi/syntree.mbt/lezer",
+  "mizchi/syntree/lezer",
 }
 
 // Values

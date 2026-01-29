@@ -1,10 +1,10 @@
 import {
-  "mizchi/syntree.mbt/lezer",
-  "mizchi/syntree.mbt/lezer/typescript",
-  "mizchi/syntree.mbt/lezer/moonbit",
-  "mizchi/syntree.mbt/lezer/json",
-  "mizchi/syntree.mbt/lezer/html",
-  "mizchi/syntree.mbt/lezer/css",
-  "mizchi/syntree.mbt/lezer/bash",
-  "mizchi/syntree.mbt/lezer/rust",
+  "mizchi/syntree/lezer",
+  "mizchi/syntree/lezer/typescript",
+  "mizchi/syntree/lezer/moonbit",
+  "mizchi/syntree/lezer/json",
+  "mizchi/syntree/lezer/html",
+  "mizchi/syntree/lezer/css",
+  "mizchi/syntree/lezer/bash",
+  "mizchi/syntree/lezer/rust",
 }

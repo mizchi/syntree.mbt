@@ -1,4 +1,4 @@
 import {
-  "mizchi/syntree.mbt/lezer",
+  "mizchi/syntree/lezer",
   "moonbitlang/core/bench",
 }

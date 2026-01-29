@@ -2,7 +2,7 @@
 
 ///|
 
-///| Run with: moon bench --target js -p mizchi/syntree.mbt/lezer
+///| Run with: moon bench --target js -p mizchi/syntree/lezer
 
 // =============================================================================
 // Test Data Generation
