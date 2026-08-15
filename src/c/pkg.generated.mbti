@@ -3,6 +3,7 @@ package "mizchi/syntree/c"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct CToken {
   token_type : CTokenType
   from : Int
   to : Int
-}
-pub impl Eq for CToken
+} derive(Eq, @debug.Debug)
 pub impl Show for CToken
 
 pub(all) enum CTokenType {
@@ -54,8 +54,7 @@ pub(all) enum CTokenType {
   LineComment
   BlockComment
   Error
-}
-pub impl Eq for CTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for CTokenType
 
 pub(all) struct CTokenizer {
@@ -69,4 +68,3 @@ pub fn CTokenizer::tokenize_all(Self) -> Array[CToken]
 // Type aliases
 
 // Traits
-

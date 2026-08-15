@@ -61,7 +61,53 @@ pub(all) enum TsTokenType {
   JsxExprEnd // } in JSX
   // Error
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TsTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    String => logger.write_string("String")
+    Number => logger.write_string("Number")
+    Regex => logger.write_string("Regex")
+    True => logger.write_string("True")
+    False => logger.write_string("False")
+    Null => logger.write_string("Null")
+    Undefined => logger.write_string("Undefined")
+    TemplateHead => logger.write_string("TemplateHead")
+    TemplateMiddle => logger.write_string("TemplateMiddle")
+    TemplateTail => logger.write_string("TemplateTail")
+    TemplateString => logger.write_string("TemplateString")
+    Identifier => logger.write_string("Identifier")
+    PrivateId => logger.write_string("PrivateId")
+    TypeName => logger.write_string("TypeName")
+    Decorator => logger.write_string("Decorator")
+    Operator => logger.write_string("Operator")
+    Spread => logger.write_string("Spread")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    Semicolon => logger.write_string("Semicolon")
+    Comma => logger.write_string("Comma")
+    Dot => logger.write_string("Dot")
+    Colon => logger.write_string("Colon")
+    LineComment => logger.write_string("LineComment")
+    BlockComment => logger.write_string("BlockComment")
+    JsxTagOpen => logger.write_string("JsxTagOpen")
+    JsxTagClose => logger.write_string("JsxTagClose")
+    JsxCloseTag => logger.write_string("JsxCloseTag")
+    JsxTagName => logger.write_string("JsxTagName")
+    JsxAttribute => logger.write_string("JsxAttribute")
+    JsxEquals => logger.write_string("JsxEquals")
+    JsxText => logger.write_string("JsxText")
+    JsxExprStart => logger.write_string("JsxExprStart")
+    JsxExprEnd => logger.write_string("JsxExprEnd")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // Keywords
@@ -177,7 +223,18 @@ pub(all) struct TsToken {
   token_type : TsTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TsToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // Tokenizer
@@ -193,7 +250,20 @@ enum TsContext {
   JsxClosingTag // Inside closing tag </xxx>
   JsxExpression // Inside {expr} in JSX
   TemplateExpr // Inside ${...} in template literal
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TsContext with fn output(self, logger) {
+  match self {
+    Normal => logger.write_string("Normal")
+    JsxTagStart => logger.write_string("JsxTagStart")
+    JsxElement => logger.write_string("JsxElement")
+    JsxChildren => logger.write_string("JsxChildren")
+    JsxClosingTag => logger.write_string("JsxClosingTag")
+    JsxExpression => logger.write_string("JsxExpression")
+    TemplateExpr => logger.write_string("TemplateExpr")
+  }
+}
 
 ///|
 /// TypeScript tokenizer with JSX support
@@ -241,7 +311,6 @@ fn TsTokenizer::push_context(self : TsTokenizer, ctx : TsContext) -> Unit {
 fn TsTokenizer::pop_context(self : TsTokenizer) -> Unit {
   if self.context_stack.length() > 1 {
     let _ = self.context_stack.pop()
-
   }
 }
 
@@ -569,13 +638,13 @@ fn TsTokenizer::read_regex(self : TsTokenizer) -> TsToken {
     if c == '\\' && self.pos + 1 < self.len {
       // Escape sequence - skip next char
       self.pos += 2
-    } else if c == '[' && not(in_class) {
+    } else if c == '[' && !in_class {
       in_class = true
       self.pos += 1
     } else if c == ']' && in_class {
       in_class = false
       self.pos += 1
-    } else if c == '/' && not(in_class) {
+    } else if c == '/' && !in_class {
       // End of pattern
       self.pos += 1
       break
@@ -1061,7 +1130,28 @@ pub(all) struct TokenizerState {
   pos : Int
   context_stack : Array[TsContext]
   last_token : TsTokenType?
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TokenizerState with fn output(self, logger) {
+  logger.write_string("{pos: ")
+  logger.write_string(self.pos.to_string())
+  logger.write_string(", context_stack: ")
+  logger.write_string("[")
+  for i, context in self.context_stack {
+    if i > 0 {
+      logger.write_string(", ")
+    }
+    context.output(logger)
+  }
+  logger.write_string("]")
+  logger.write_string(", last_token: ")
+  match self.last_token {
+    Some(token) => token.output(logger)
+    None => logger.write_string("None")
+  }
+  logger.write_string("}")
+}
 
 ///|
 /// Save current tokenizer state
@@ -1312,11 +1402,9 @@ pub fn TokenCache::update(
   // Truncate old data from start_line
   while self.lines.length() > start_line {
     let _ = self.lines.pop()
-
   }
   while self.line_states.length() > start_line {
     let _ = self.line_states.pop()
-
   }
 
   // Add new lines

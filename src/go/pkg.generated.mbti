@@ -3,6 +3,7 @@ package "mizchi/syntree/go"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct GoToken {
   token_type : GoTokenType
   from : Int
   to : Int
-}
-pub impl Eq for GoToken
+} derive(Eq, @debug.Debug)
 pub impl Show for GoToken
 
 pub(all) enum GoTokenType {
@@ -53,8 +53,7 @@ pub(all) enum GoTokenType {
   LineComment
   BlockComment
   Error
-}
-pub impl Eq for GoTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for GoTokenType
 
 pub(all) struct GoTokenizer {
@@ -68,4 +67,3 @@ pub fn GoTokenizer::tokenize_all(Self) -> Array[GoToken]
 // Type aliases
 
 // Traits
-

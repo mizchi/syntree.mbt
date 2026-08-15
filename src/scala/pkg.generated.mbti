@@ -3,6 +3,7 @@ package "mizchi/syntree/scala"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct ScalaToken {
   token_type : ScalaTokenType
   from : Int
   to : Int
-}
-pub impl Eq for ScalaToken
+} derive(Eq, @debug.Debug)
 pub impl Show for ScalaToken
 
 pub(all) enum ScalaTokenType {
@@ -62,8 +62,7 @@ pub(all) enum ScalaTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for ScalaTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for ScalaTokenType
 
 pub(all) struct ScalaTokenizer {
@@ -77,4 +76,3 @@ pub fn ScalaTokenizer::tokenize_all(Self) -> Array[ScalaToken]
 // Type aliases
 
 // Traits
-

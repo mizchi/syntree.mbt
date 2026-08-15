@@ -3,6 +3,7 @@ package "mizchi/syntree/zig"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct ZigToken {
   token_type : ZigTokenType
   from : Int
   to : Int
-}
-pub impl Eq for ZigToken
+} derive(Eq, @debug.Debug)
 pub impl Show for ZigToken
 
 pub(all) enum ZigTokenType {
@@ -55,8 +55,7 @@ pub(all) enum ZigTokenType {
   LineComment
   DocComment
   Error
-}
-pub impl Eq for ZigTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for ZigTokenType
 
 pub(all) struct ZigTokenizer {
@@ -70,4 +69,3 @@ pub fn ZigTokenizer::tokenize_all(Self) -> Array[ZigToken]
 // Type aliases
 
 // Traits
-

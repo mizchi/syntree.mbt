@@ -426,7 +426,6 @@ test "TreeCursor full traversal" {
         traverse(cursor, visited)
       }
       let _ = cursor.parent()
-
     }
   }
 

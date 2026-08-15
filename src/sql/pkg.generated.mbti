@@ -3,6 +3,7 @@ package "mizchi/syntree/sql"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct SqlToken {
   token_type : SqlTokenType
   from : Int
   to : Int
-}
-pub impl Eq for SqlToken
+} derive(Eq, @debug.Debug)
 pub impl Show for SqlToken
 
 pub(all) enum SqlTokenType {
@@ -50,8 +50,7 @@ pub(all) enum SqlTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for SqlTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for SqlTokenType
 
 pub(all) struct SqlTokenizer {
@@ -65,4 +64,3 @@ pub fn SqlTokenizer::tokenize_all(Self) -> Array[SqlToken]
 // Type aliases
 
 // Traits
-

@@ -77,7 +77,66 @@ pub(all) enum MdxTokenType {
   Whitespace // Spaces, tabs
   Newline // Line breaks
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MdxTokenType with fn output(self, logger) {
+  match self {
+    Heading => logger.write_string("Heading")
+    HeadingMarker => logger.write_string("HeadingMarker")
+    Paragraph => logger.write_string("Paragraph")
+    CodeBlock => logger.write_string("CodeBlock")
+    CodeFence => logger.write_string("CodeFence")
+    CodeInfo => logger.write_string("CodeInfo")
+    CodeContent => logger.write_string("CodeContent")
+    BlockQuote => logger.write_string("BlockQuote")
+    BlockQuoteMarker => logger.write_string("BlockQuoteMarker")
+    ThematicBreak => logger.write_string("ThematicBreak")
+    ListMarker => logger.write_string("ListMarker")
+    ListItem => logger.write_string("ListItem")
+    HtmlBlock => logger.write_string("HtmlBlock")
+    Text => logger.write_string("Text")
+    Emphasis => logger.write_string("Emphasis")
+    EmphasisMarker => logger.write_string("EmphasisMarker")
+    Strong => logger.write_string("Strong")
+    StrongMarker => logger.write_string("StrongMarker")
+    InlineCode => logger.write_string("InlineCode")
+    InlineCodeMarker => logger.write_string("InlineCodeMarker")
+    Link => logger.write_string("Link")
+    LinkText => logger.write_string("LinkText")
+    LinkUrl => logger.write_string("LinkUrl")
+    LinkTitle => logger.write_string("LinkTitle")
+    Image => logger.write_string("Image")
+    Autolink => logger.write_string("Autolink")
+    HardBreak => logger.write_string("HardBreak")
+    FrontmatterMarker => logger.write_string("FrontmatterMarker")
+    FrontmatterContent => logger.write_string("FrontmatterContent")
+    ImportKeyword => logger.write_string("ImportKeyword")
+    ExportKeyword => logger.write_string("ExportKeyword")
+    FromKeyword => logger.write_string("FromKeyword")
+    AsKeyword => logger.write_string("AsKeyword")
+    DefaultKeyword => logger.write_string("DefaultKeyword")
+    ConstKeyword => logger.write_string("ConstKeyword")
+    FunctionKeyword => logger.write_string("FunctionKeyword")
+    JsIdentifier => logger.write_string("JsIdentifier")
+    JsString => logger.write_string("JsString")
+    JsOperator => logger.write_string("JsOperator")
+    JsBrace => logger.write_string("JsBrace")
+    JsComment => logger.write_string("JsComment")
+    JsxTagOpen => logger.write_string("JsxTagOpen")
+    JsxTagClose => logger.write_string("JsxTagClose")
+    JsxCloseTag => logger.write_string("JsxCloseTag")
+    JsxTagName => logger.write_string("JsxTagName")
+    JsxAttribute => logger.write_string("JsxAttribute")
+    JsxEquals => logger.write_string("JsxEquals")
+    JsxExprStart => logger.write_string("JsxExprStart")
+    JsxExprEnd => logger.write_string("JsxExprEnd")
+    JsxText => logger.write_string("JsxText")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // Context
@@ -102,7 +161,28 @@ enum MdxContext {
 
   // JavaScript contexts (for import/export)
   JsStatement // Parsing import/export statement
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MdxContext with fn output(self, logger) {
+  match self {
+    Normal => logger.write_string("Normal")
+    Frontmatter => logger.write_string("Frontmatter")
+    CodeBlock(c, n) => {
+      logger.write_string("CodeBlock(")
+      logger.write_string(c.to_string())
+      logger.write_string(", ")
+      logger.write_string(n.to_string())
+      logger.write_string(")")
+    }
+    JsxTagStart => logger.write_string("JsxTagStart")
+    JsxElement => logger.write_string("JsxElement")
+    JsxChildren => logger.write_string("JsxChildren")
+    JsxClosingTag => logger.write_string("JsxClosingTag")
+    JsxExpression => logger.write_string("JsxExpression")
+    JsStatement => logger.write_string("JsStatement")
+  }
+}
 
 // =============================================================================
 // Token
@@ -114,7 +194,18 @@ pub(all) struct MdxToken {
   token_type : MdxTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MdxToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // Tokenizer
@@ -166,7 +257,6 @@ fn MdxTokenizer::push_context(self : MdxTokenizer, ctx : MdxContext) -> Unit {
 fn MdxTokenizer::pop_context(self : MdxTokenizer) -> Unit {
   if self.context_stack.length() > 1 {
     let _ = self.context_stack.pop()
-
   }
 }
 

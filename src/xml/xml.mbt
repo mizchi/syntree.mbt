@@ -17,14 +17,47 @@ pub(all) enum XmlTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for XmlTokenType with fn output(self, logger) {
+  match self {
+    TagOpen => logger.write_string("TagOpen")
+    TagClose => logger.write_string("TagClose")
+    TagSelfClose => logger.write_string("TagSelfClose")
+    TagName => logger.write_string("TagName")
+    AttrName => logger.write_string("AttrName")
+    AttrValue => logger.write_string("AttrValue")
+    Text => logger.write_string("Text")
+    Comment => logger.write_string("Comment")
+    CData => logger.write_string("CData")
+    ProcessingInstruction => logger.write_string("ProcessingInstruction")
+    DocType => logger.write_string("DocType")
+    Entity => logger.write_string("Entity")
+    Equals => logger.write_string("Equals")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct XmlToken {
   token_type : XmlTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for XmlToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct XmlTokenizer {

@@ -3,6 +3,7 @@ package "mizchi/syntree/yaml"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct YamlToken {
   token_type : YamlTokenType
   from : Int
   to : Int
-}
-pub impl Eq for YamlToken
+} derive(Eq, @debug.Debug)
 pub impl Show for YamlToken
 
 pub(all) enum YamlTokenType {
@@ -47,8 +47,7 @@ pub(all) enum YamlTokenType {
   Greater
   Comment
   Error
-}
-pub impl Eq for YamlTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for YamlTokenType
 
 pub(all) struct YamlTokenizer {
@@ -62,4 +61,3 @@ pub fn YamlTokenizer::tokenize_all(Self) -> Array[YamlToken]
 // Type aliases
 
 // Traits
-

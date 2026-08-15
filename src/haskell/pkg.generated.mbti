@@ -3,6 +3,7 @@ package "mizchi/syntree/haskell"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct HaskellToken {
   token_type : HaskellTokenType
   from : Int
   to : Int
-}
-pub impl Eq for HaskellToken
+} derive(Eq, @debug.Debug)
 pub impl Show for HaskellToken
 
 pub(all) enum HaskellTokenType {
@@ -61,8 +61,7 @@ pub(all) enum HaskellTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for HaskellTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for HaskellTokenType
 
 pub(all) struct HaskellTokenizer {
@@ -76,4 +75,3 @@ pub fn HaskellTokenizer::tokenize_all(Self) -> Array[HaskellToken]
 // Type aliases
 
 // Traits
-

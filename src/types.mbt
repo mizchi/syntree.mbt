@@ -29,7 +29,18 @@ pub(all) struct NodeType {
   name : String
   /// Whether this is an error node
   is_error : Bool
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for NodeType with fn output(self, logger) {
+  logger.write_string("{id: ")
+  logger.write_string(self.id.to_string())
+  logger.write_string(", name: ")
+  logger.write_string(self.name)
+  logger.write_string(", is_error: ")
+  logger.write_string(self.is_error.to_string())
+  logger.write_string("}")
+}
 
 ///|
 /// Create a new node type

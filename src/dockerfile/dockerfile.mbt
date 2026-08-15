@@ -14,14 +14,44 @@ pub(all) enum DockerfileTokenType {
   Newline
   Continuation
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for DockerfileTokenType with fn output(self, logger) {
+  match self {
+    Instruction => logger.write_string("Instruction")
+    String => logger.write_string("String")
+    Number => logger.write_string("Number")
+    Variable => logger.write_string("Variable")
+    Flag => logger.write_string("Flag")
+    Argument => logger.write_string("Argument")
+    Path => logger.write_string("Path")
+    Equals => logger.write_string("Equals")
+    Comment => logger.write_string("Comment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Continuation => logger.write_string("Continuation")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct DockerfileToken {
   token_type : DockerfileTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for DockerfileToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct DockerfileTokenizer {

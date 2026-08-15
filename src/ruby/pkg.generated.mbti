@@ -3,6 +3,7 @@ package "mizchi/syntree/ruby"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct RubyToken {
   token_type : RubyTokenType
   from : Int
   to : Int
-}
-pub impl Eq for RubyToken
+} derive(Eq, @debug.Debug)
 pub impl Show for RubyToken
 
 pub(all) enum RubyTokenType {
@@ -62,8 +62,7 @@ pub(all) enum RubyTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for RubyTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for RubyTokenType
 
 pub(all) struct RubyTokenizer {
@@ -77,4 +76,3 @@ pub fn RubyTokenizer::tokenize_all(Self) -> Array[RubyToken]
 // Type aliases
 
 // Traits
-

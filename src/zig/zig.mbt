@@ -51,7 +51,44 @@ pub(all) enum ZigTokenType {
 
   // Error
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ZigTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    TypeKeyword => logger.write_string("TypeKeyword")
+    Builtin => logger.write_string("Builtin")
+    Identifier => logger.write_string("Identifier")
+    TypeName => logger.write_string("TypeName")
+    Number => logger.write_string("Number")
+    String => logger.write_string("String")
+    MultilineString => logger.write_string("MultilineString")
+    Char => logger.write_string("Char")
+    Operator => logger.write_string("Operator")
+    Assignment => logger.write_string("Assignment")
+    Comparison => logger.write_string("Comparison")
+    Arrow => logger.write_string("Arrow")
+    Optional => logger.write_string("Optional")
+    ErrorUnion => logger.write_string("ErrorUnion")
+    Pointer => logger.write_string("Pointer")
+    Range => logger.write_string("Range")
+    Semicolon => logger.write_string("Semicolon")
+    Comma => logger.write_string("Comma")
+    Colon => logger.write_string("Colon")
+    Dot => logger.write_string("Dot")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    Pipe => logger.write_string("Pipe")
+    LineComment => logger.write_string("LineComment")
+    DocComment => logger.write_string("DocComment")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // Zig Token
@@ -63,7 +100,18 @@ pub(all) struct ZigToken {
   token_type : ZigTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for ZigToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // Zig Keywords

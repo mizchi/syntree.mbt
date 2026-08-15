@@ -3,6 +3,7 @@ package "mizchi/syntree/bash"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct BashToken {
   token_type : BashTokenType
   from : Int
   to : Int
-}
-pub impl Eq for BashToken
+} derive(Eq, @debug.Debug)
 pub impl Show for BashToken
 
 pub(all) enum BashTokenType {
@@ -58,8 +58,7 @@ pub(all) enum BashTokenType {
   Equals
   Number
   Error
-}
-pub impl Eq for BashTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for BashTokenType
 
 pub(all) struct BashTokenizer {
@@ -73,4 +72,3 @@ pub fn BashTokenizer::tokenize_all(Self) -> Array[BashToken]
 // Type aliases
 
 // Traits
-

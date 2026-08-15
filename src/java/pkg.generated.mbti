@@ -3,6 +3,7 @@ package "mizchi/syntree/java"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct JavaToken {
   token_type : JavaTokenType
   from : Int
   to : Int
-}
-pub impl Eq for JavaToken
+} derive(Eq, @debug.Debug)
 pub impl Show for JavaToken
 
 pub(all) enum JavaTokenType {
@@ -58,8 +58,7 @@ pub(all) enum JavaTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for JavaTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for JavaTokenType
 
 pub(all) struct JavaTokenizer {
@@ -73,4 +72,3 @@ pub fn JavaTokenizer::tokenize_all(Self) -> Array[JavaToken]
 // Type aliases
 
 // Traits
-

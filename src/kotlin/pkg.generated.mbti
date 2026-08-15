@@ -3,6 +3,7 @@ package "mizchi/syntree/kotlin"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct KotlinToken {
   token_type : KotlinTokenType
   from : Int
   to : Int
-}
-pub impl Eq for KotlinToken
+} derive(Eq, @debug.Debug)
 pub impl Show for KotlinToken
 
 pub(all) enum KotlinTokenType {
@@ -63,8 +63,7 @@ pub(all) enum KotlinTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for KotlinTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for KotlinTokenType
 
 pub(all) struct KotlinTokenizer {
@@ -78,4 +77,3 @@ pub fn KotlinTokenizer::tokenize_all(Self) -> Array[KotlinToken]
 // Type aliases
 
 // Traits
-

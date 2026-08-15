@@ -39,14 +39,69 @@ pub(all) enum RubyTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RubyTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    DeclKeyword => logger.write_string("DeclKeyword")
+    Modifier => logger.write_string("Modifier")
+    String => logger.write_string("String")
+    HeredocString => logger.write_string("HeredocString")
+    Regex => logger.write_string("Regex")
+    Symbol => logger.write_string("Symbol")
+    Number => logger.write_string("Number")
+    Bool => logger.write_string("Bool")
+    Nil => logger.write_string("Nil")
+    Identifier => logger.write_string("Identifier")
+    Constant => logger.write_string("Constant")
+    InstanceVar => logger.write_string("InstanceVar")
+    ClassVar => logger.write_string("ClassVar")
+    GlobalVar => logger.write_string("GlobalVar")
+    Operator => logger.write_string("Operator")
+    Comparison => logger.write_string("Comparison")
+    Assignment => logger.write_string("Assignment")
+    Logical => logger.write_string("Logical")
+    Range => logger.write_string("Range")
+    Splat => logger.write_string("Splat")
+    BlockArg => logger.write_string("BlockArg")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Comma => logger.write_string("Comma")
+    Semicolon => logger.write_string("Semicolon")
+    Colon => logger.write_string("Colon")
+    DoubleColon => logger.write_string("DoubleColon")
+    Dot => logger.write_string("Dot")
+    Question => logger.write_string("Question")
+    Comment => logger.write_string("Comment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct RubyToken {
   token_type : RubyTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RubyToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct RubyTokenizer {

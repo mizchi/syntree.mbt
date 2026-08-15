@@ -3,6 +3,7 @@ package "mizchi/syntree/toml"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct TomlToken {
   token_type : TomlTokenType
   from : Int
   to : Int
-}
-pub impl Eq for TomlToken
+} derive(Eq, @debug.Debug)
 pub impl Show for TomlToken
 
 pub(all) enum TomlTokenType {
@@ -43,8 +43,7 @@ pub(all) enum TomlTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for TomlTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for TomlTokenType
 
 pub(all) struct TomlTokenizer {
@@ -58,4 +57,3 @@ pub fn TomlTokenizer::tokenize_all(Self) -> Array[TomlToken]
 // Type aliases
 
 // Traits
-

@@ -48,7 +48,41 @@ pub(all) enum RustTokenType {
   DocComment // /// or //!
   // Error
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RustTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    ControlFlow => logger.write_string("ControlFlow")
+    String => logger.write_string("String")
+    Char => logger.write_string("Char")
+    Number => logger.write_string("Number")
+    Bool => logger.write_string("Bool")
+    Identifier => logger.write_string("Identifier")
+    TypeName => logger.write_string("TypeName")
+    Lifetime => logger.write_string("Lifetime")
+    Macro => logger.write_string("Macro")
+    Attribute => logger.write_string("Attribute")
+    Operator => logger.write_string("Operator")
+    Arrow => logger.write_string("Arrow")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    Semicolon => logger.write_string("Semicolon")
+    Comma => logger.write_string("Comma")
+    Dot => logger.write_string("Dot")
+    Colon => logger.write_string("Colon")
+    ColonColon => logger.write_string("ColonColon")
+    LineComment => logger.write_string("LineComment")
+    BlockComment => logger.write_string("BlockComment")
+    DocComment => logger.write_string("DocComment")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // Keywords
@@ -159,7 +193,18 @@ pub(all) struct RustToken {
   token_type : RustTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for RustToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // Tokenizer

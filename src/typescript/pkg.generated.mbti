@@ -3,6 +3,7 @@ package "mizchi/syntree/typescript"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -34,20 +35,17 @@ pub(all) struct TokenizerState {
   pos : Int
   context_stack : Array[TsContext]
   last_token : TsTokenType?
-}
-pub impl Eq for TokenizerState
+} derive(Eq, @debug.Debug)
 pub impl Show for TokenizerState
 
-type TsContext
-pub impl Eq for TsContext
+type TsContext derive(Eq, @debug.Debug)
 pub impl Show for TsContext
 
 pub(all) struct TsToken {
   token_type : TsTokenType
   from : Int
   to : Int
-}
-pub impl Eq for TsToken
+} derive(Eq, @debug.Debug)
 pub impl Show for TsToken
 
 pub(all) enum TsTokenType {
@@ -91,8 +89,7 @@ pub(all) enum TsTokenType {
   JsxExprStart
   JsxExprEnd
   Error
-}
-pub impl Eq for TsTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for TsTokenType
 
 pub(all) struct TsTokenizer {
@@ -109,4 +106,3 @@ pub fn TsTokenizer::tokenize_all(Self) -> Array[TsToken]
 // Type aliases
 
 // Traits
-

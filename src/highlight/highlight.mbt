@@ -263,7 +263,7 @@ pub fn tokens_to_html(
   while pos <= len {
     let is_newline = pos < len && chars[pos] == '\n'
     let is_end = pos == len
-    if not(in_line) {
+    if !in_line {
       result.write_string("<span class=\"line\">")
       in_line = true
       line_start = pos

@@ -32,7 +32,30 @@ pub(all) enum JsonNodeId {
   PropertyName // "key" in "key": value
   // Error
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for JsonNodeId with fn output(self, logger) {
+  match self {
+    JsonDocument => logger.write_string("JsonDocument")
+    Object => logger.write_string("Object")
+    Array => logger.write_string("Array")
+    Property => logger.write_string("Property")
+    String => logger.write_string("String")
+    Number => logger.write_string("Number")
+    True => logger.write_string("True")
+    False => logger.write_string("False")
+    Null => logger.write_string("Null")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    Colon => logger.write_string("Colon")
+    Comma => logger.write_string("Comma")
+    PropertyName => logger.write_string("PropertyName")
+    Error => logger.write_string("Error")
+  }
+}
 
 ///|
 /// Convert JsonNodeId to Int
@@ -117,7 +140,18 @@ pub(all) struct JsonToken {
   node_type : JsonNodeId
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for JsonToken with fn output(self, logger) {
+  logger.write_string("{node_type: ")
+  self.node_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 /// JSON Tokenizer state
@@ -479,7 +513,7 @@ pub fn JsonParser::parse_object(self : JsonParser) -> @syntree.Tree? {
   )
 
   // Parse properties
-  while not(self.at_end()) {
+  while !self.at_end() {
     match self.peek() {
       Some(token) if token.node_type == BraceClose => break
       Some(token) if token.node_type == String => {
@@ -590,7 +624,7 @@ pub fn JsonParser::parse_array(self : JsonParser) -> @syntree.Tree? {
   )
 
   // Parse elements
-  while not(self.at_end()) {
+  while !self.at_end() {
     match self.peek() {
       Some(token) if token.node_type == BracketClose => break
       _ => {

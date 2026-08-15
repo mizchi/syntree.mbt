@@ -38,14 +38,68 @@ pub(all) enum HaskellTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HaskellTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    ModuleKeyword => logger.write_string("ModuleKeyword")
+    TypeKeyword => logger.write_string("TypeKeyword")
+    String => logger.write_string("String")
+    Char => logger.write_string("Char")
+    Number => logger.write_string("Number")
+    Bool => logger.write_string("Bool")
+    Identifier => logger.write_string("Identifier")
+    TypeName => logger.write_string("TypeName")
+    TypeVar => logger.write_string("TypeVar")
+    Constructor => logger.write_string("Constructor")
+    Operator => logger.write_string("Operator")
+    Comparison => logger.write_string("Comparison")
+    Assignment => logger.write_string("Assignment")
+    Arrow => logger.write_string("Arrow")
+    FatArrow => logger.write_string("FatArrow")
+    TypeArrow => logger.write_string("TypeArrow")
+    Constraint => logger.write_string("Constraint")
+    Guard => logger.write_string("Guard")
+    Lambda => logger.write_string("Lambda")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Comma => logger.write_string("Comma")
+    Semicolon => logger.write_string("Semicolon")
+    Backtick => logger.write_string("Backtick")
+    At => logger.write_string("At")
+    Underscore => logger.write_string("Underscore")
+    LineComment => logger.write_string("LineComment")
+    BlockComment => logger.write_string("BlockComment")
+    Pragma => logger.write_string("Pragma")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct HaskellToken {
   token_type : HaskellTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HaskellToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct HaskellTokenizer {
@@ -336,7 +390,7 @@ pub fn HaskellTokenizer::next_token(self : HaskellTokenizer) -> HaskellToken? {
   // Line comment
   if c == '-' && self.peek_at(1) == Some('-') {
     // Check if it's not an operator
-    if self.peek_at(2).map(fn(x) { not(is_operator_char(x)) }).unwrap_or(true) {
+    if self.peek_at(2).map(fn(x) { !is_operator_char(x) }).unwrap_or(true) {
       while self.pos < self.len && self.chars[self.pos] != '\n' {
         self.pos += 1
       }

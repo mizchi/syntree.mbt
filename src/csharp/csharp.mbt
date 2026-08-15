@@ -42,14 +42,72 @@ pub(all) enum CsharpTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CsharpTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    ContextKeyword => logger.write_string("ContextKeyword")
+    Modifier => logger.write_string("Modifier")
+    String => logger.write_string("String")
+    VerbatimString => logger.write_string("VerbatimString")
+    InterpolatedString => logger.write_string("InterpolatedString")
+    Char => logger.write_string("Char")
+    Number => logger.write_string("Number")
+    Bool => logger.write_string("Bool")
+    Null => logger.write_string("Null")
+    Identifier => logger.write_string("Identifier")
+    TypeKeyword => logger.write_string("TypeKeyword")
+    TypeName => logger.write_string("TypeName")
+    Attribute => logger.write_string("Attribute")
+    Preprocessor => logger.write_string("Preprocessor")
+    Operator => logger.write_string("Operator")
+    Comparison => logger.write_string("Comparison")
+    Assignment => logger.write_string("Assignment")
+    Logical => logger.write_string("Logical")
+    Bitwise => logger.write_string("Bitwise")
+    Increment => logger.write_string("Increment")
+    NullCoalesce => logger.write_string("NullCoalesce")
+    NullConditional => logger.write_string("NullConditional")
+    Arrow => logger.write_string("Arrow")
+    Lambda => logger.write_string("Lambda")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Comma => logger.write_string("Comma")
+    Semicolon => logger.write_string("Semicolon")
+    Colon => logger.write_string("Colon")
+    Dot => logger.write_string("Dot")
+    LineComment => logger.write_string("LineComment")
+    BlockComment => logger.write_string("BlockComment")
+    DocComment => logger.write_string("DocComment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct CsharpToken {
   token_type : CsharpTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CsharpToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct CsharpTokenizer {

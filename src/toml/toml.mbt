@@ -20,14 +20,50 @@ pub(all) enum TomlTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TomlTokenType with fn output(self, logger) {
+  match self {
+    Key => logger.write_string("Key")
+    TableHeader => logger.write_string("TableHeader")
+    ArrayTable => logger.write_string("ArrayTable")
+    String => logger.write_string("String")
+    MultilineString => logger.write_string("MultilineString")
+    Number => logger.write_string("Number")
+    Bool => logger.write_string("Bool")
+    DateTime => logger.write_string("DateTime")
+    Equals => logger.write_string("Equals")
+    Dot => logger.write_string("Dot")
+    Comma => logger.write_string("Comma")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Comment => logger.write_string("Comment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct TomlToken {
   token_type : TomlTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for TomlToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct TomlTokenizer {

@@ -58,7 +58,47 @@ pub(all) enum BashTokenType {
 
   // Error
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for BashTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    Command => logger.write_string("Command")
+    Argument => logger.write_string("Argument")
+    Option => logger.write_string("Option")
+    Variable => logger.write_string("Variable")
+    SpecialVar => logger.write_string("SpecialVar")
+    DoubleString => logger.write_string("DoubleString")
+    SingleString => logger.write_string("SingleString")
+    RawString => logger.write_string("RawString")
+    HereDoc => logger.write_string("HereDoc")
+    Pipe => logger.write_string("Pipe")
+    PipeAnd => logger.write_string("PipeAnd")
+    And => logger.write_string("And")
+    Or => logger.write_string("Or")
+    Redirect => logger.write_string("Redirect")
+    Background => logger.write_string("Background")
+    Semicolon => logger.write_string("Semicolon")
+    DoubleSemicolon => logger.write_string("DoubleSemicolon")
+    CommandSub => logger.write_string("CommandSub")
+    ProcessSub => logger.write_string("ProcessSub")
+    ArithmeticExp => logger.write_string("ArithmeticExp")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    DoubleBracket => logger.write_string("DoubleBracket")
+    Comment => logger.write_string("Comment")
+    Shebang => logger.write_string("Shebang")
+    Glob => logger.write_string("Glob")
+    Equals => logger.write_string("Equals")
+    Number => logger.write_string("Number")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // Bash Token
@@ -70,7 +110,18 @@ pub(all) struct BashToken {
   token_type : BashTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for BashToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // Bash Keywords
@@ -354,7 +405,7 @@ fn BashTokenizer::read_word(self : BashTokenizer) -> BashToken {
   }
 
   // First word after newline/semicolon is a command
-  if self.at_line_start && not(self.after_command) {
+  if self.at_line_start && !self.after_command {
     self.after_command = true
     return { token_type: Command, from: start, to: self.pos }
   }
