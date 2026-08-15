@@ -41,7 +41,36 @@ pub(all) enum YamlTokenType {
 
   // Errors
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for YamlTokenType with fn output(self, logger) {
+  match self {
+    Key => logger.write_string("Key")
+    Value => logger.write_string("Value")
+    ListItem => logger.write_string("ListItem")
+    String => logger.write_string("String")
+    UnquotedString => logger.write_string("UnquotedString")
+    Number => logger.write_string("Number")
+    Bool => logger.write_string("Bool")
+    Null => logger.write_string("Null")
+    Anchor => logger.write_string("Anchor")
+    Alias => logger.write_string("Alias")
+    Tag => logger.write_string("Tag")
+    Directive => logger.write_string("Directive")
+    Colon => logger.write_string("Colon")
+    Dash => logger.write_string("Dash")
+    Comma => logger.write_string("Comma")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Pipe => logger.write_string("Pipe")
+    Greater => logger.write_string("Greater")
+    Comment => logger.write_string("Comment")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // YAML Token
@@ -53,7 +82,18 @@ pub(all) struct YamlToken {
   token_type : YamlTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for YamlToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // YAML Tokenizer
@@ -232,11 +272,9 @@ fn is_number_str(s : String) -> Bool {
     i += 2
     while i < chars.length() {
       let c = chars[i]
-      if not(
-          (c >= '0' && c <= '9') ||
-          (c >= 'a' && c <= 'f') ||
-          (c >= 'A' && c <= 'F'),
-        ) {
+      if !((c >= '0' && c <= '9') ||
+        (c >= 'a' && c <= 'f') ||
+        (c >= 'A' && c <= 'F')) {
         return false
       }
       i += 1
@@ -250,7 +288,7 @@ fn is_number_str(s : String) -> Bool {
     i += 2
     while i < chars.length() {
       let c = chars[i]
-      if not(c >= '0' && c <= '7') {
+      if !(c >= '0' && c <= '7') {
         return false
       }
       i += 1

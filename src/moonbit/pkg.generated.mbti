@@ -3,6 +3,7 @@ package "mizchi/syntree/moonbit"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -15,16 +16,14 @@ pub fn mbt_highlighter() -> @syntree.Highlighter
 // Errors
 
 // Types and methods
-type MbtContext
-pub impl Eq for MbtContext
+type MbtContext derive(Eq, @debug.Debug)
 pub impl Show for MbtContext
 
 pub(all) struct MbtToken {
   token_type : MbtTokenType
   from : Int
   to : Int
-}
-pub impl Eq for MbtToken
+} derive(Eq, @debug.Debug)
 pub impl Show for MbtToken
 
 pub(all) enum MbtTokenType {
@@ -69,8 +68,7 @@ pub(all) enum MbtTokenType {
   InterpStringMiddle
   InterpStringTail
   Error
-}
-pub impl Eq for MbtTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for MbtTokenType
 
 pub(all) struct MbtTokenizer {
@@ -84,4 +82,3 @@ pub fn MbtTokenizer::tokenize_all(Self) -> Array[MbtToken]
 // Type aliases
 
 // Traits
-

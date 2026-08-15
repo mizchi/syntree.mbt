@@ -3,6 +3,7 @@ package "mizchi/syntree/graphql"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct GraphqlToken {
   token_type : GraphqlTokenType
   from : Int
   to : Int
-}
-pub impl Eq for GraphqlToken
+} derive(Eq, @debug.Debug)
 pub impl Show for GraphqlToken
 
 pub(all) enum GraphqlTokenType {
@@ -55,8 +55,7 @@ pub(all) enum GraphqlTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for GraphqlTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for GraphqlTokenType
 
 pub(all) struct GraphqlTokenizer {
@@ -70,4 +69,3 @@ pub fn GraphqlTokenizer::tokenize_all(Self) -> Array[GraphqlToken]
 // Type aliases
 
 // Traits
-

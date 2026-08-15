@@ -3,6 +3,7 @@ package "mizchi/syntree/ocaml"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct OcamlToken {
   token_type : OcamlTokenType
   from : Int
   to : Int
-}
-pub impl Eq for OcamlToken
+} derive(Eq, @debug.Debug)
 pub impl Show for OcamlToken
 
 pub(all) enum OcamlTokenType {
@@ -57,8 +57,7 @@ pub(all) enum OcamlTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for OcamlTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for OcamlTokenType
 
 pub(all) struct OcamlTokenizer {
@@ -72,4 +71,3 @@ pub fn OcamlTokenizer::tokenize_all(Self) -> Array[OcamlToken]
 // Type aliases
 
 // Traits
-

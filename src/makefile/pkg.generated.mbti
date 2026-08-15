@@ -3,6 +3,7 @@ package "mizchi/syntree/makefile"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct MakefileToken {
   token_type : MakefileTokenType
   from : Int
   to : Int
-}
-pub impl Eq for MakefileToken
+} derive(Eq, @debug.Debug)
 pub impl Show for MakefileToken
 
 pub(all) enum MakefileTokenType {
@@ -42,8 +42,7 @@ pub(all) enum MakefileTokenType {
   Newline
   Tab
   Unknown
-}
-pub impl Eq for MakefileTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for MakefileTokenType
 
 pub(all) struct MakefileTokenizer {
@@ -57,4 +56,3 @@ pub fn MakefileTokenizer::tokenize_all(Self) -> Array[MakefileToken]
 // Type aliases
 
 // Traits
-

@@ -60,7 +60,54 @@ pub(all) enum MbtTokenType {
   InterpStringTail // }...  (end of interpolation)
   // Error
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MbtTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    String => logger.write_string("String")
+    StringHead => logger.write_string("StringHead")
+    StringMiddle => logger.write_string("StringMiddle")
+    StringTail => logger.write_string("StringTail")
+    Char => logger.write_string("Char")
+    Byte => logger.write_string("Byte")
+    ByteString => logger.write_string("ByteString")
+    Number => logger.write_string("Number")
+    True => logger.write_string("True")
+    False => logger.write_string("False")
+    Identifier => logger.write_string("Identifier")
+    TypeName => logger.write_string("TypeName")
+    Label => logger.write_string("Label")
+    Operator => logger.write_string("Operator")
+    Arrow => logger.write_string("Arrow")
+    Range => logger.write_string("Range")
+    Pipe => logger.write_string("Pipe")
+    Question => logger.write_string("Question")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    Semicolon => logger.write_string("Semicolon")
+    Comma => logger.write_string("Comma")
+    Dot => logger.write_string("Dot")
+    Colon => logger.write_string("Colon")
+    DoubleColon => logger.write_string("DoubleColon")
+    At => logger.write_string("At")
+    Tilde => logger.write_string("Tilde")
+    Underscore => logger.write_string("Underscore")
+    LineComment => logger.write_string("LineComment")
+    DocComment => logger.write_string("DocComment")
+    RawString => logger.write_string("RawString")
+    InterpString => logger.write_string("InterpString")
+    InterpStringHead => logger.write_string("InterpStringHead")
+    InterpStringMiddle => logger.write_string("InterpStringMiddle")
+    InterpStringTail => logger.write_string("InterpStringTail")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // Keywords
@@ -144,7 +191,18 @@ pub(all) struct MbtToken {
   token_type : MbtTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MbtToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // Context
@@ -156,7 +214,16 @@ enum MbtContext {
   Normal // Regular code
   StringInterp // Inside \{...} in "..." string
   InterpStringInterp // Inside \{...} in $|... string
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MbtContext with fn output(self, logger) {
+  match self {
+    Normal => logger.write_string("Normal")
+    StringInterp => logger.write_string("StringInterp")
+    InterpStringInterp => logger.write_string("InterpStringInterp")
+  }
+}
 
 // =============================================================================
 // Tokenizer
@@ -200,7 +267,6 @@ fn MbtTokenizer::push_context(self : MbtTokenizer, ctx : MbtContext) -> Unit {
 fn MbtTokenizer::pop_context(self : MbtTokenizer) -> Unit {
   if self.context_stack.length() > 1 {
     let _ = self.context_stack.pop()
-
   }
 }
 

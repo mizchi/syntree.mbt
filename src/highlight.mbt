@@ -44,7 +44,38 @@ pub(all) enum HighlightTag {
   Invalid
   // No highlighting
   None
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HighlightTag with fn output(self, logger) {
+  let name = match self {
+    Keyword => "Keyword"
+    Operator => "Operator"
+    Punctuation => "Punctuation"
+    String => "String"
+    Number => "Number"
+    Regexp => "Regexp"
+    Bool => "Bool"
+    Null => "Null"
+    PropertyName => "PropertyName"
+    VariableName => "VariableName"
+    FunctionName => "FunctionName"
+    TypeName => "TypeName"
+    ClassName => "ClassName"
+    PrivateName => "PrivateName"
+    Meta => "Meta"
+    Bracket => "Bracket"
+    Brace => "Brace"
+    Paren => "Paren"
+    Comment => "Comment"
+    DocComment => "DocComment"
+    TagName => "TagName"
+    TagBracket => "TagBracket"
+    Invalid => "Invalid"
+    None => "None"
+  }
+  logger.write_string(name)
+}
 
 ///|
 /// Convert HighlightTag to CSS class name
@@ -87,7 +118,18 @@ pub(all) struct HighlightToken {
   from : Int
   to : Int
   tag : HighlightTag
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HighlightToken with fn output(self, logger) {
+  logger.write_string("{from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string(", tag: ")
+  self.tag.output(logger)
+  logger.write_string("}")
+}
 
 ///|
 /// Create a highlight token
@@ -358,7 +400,6 @@ pub fn LineCache::update(
   // Truncate lines to start_line
   while self.lines.length() > start_line {
     let _ = self.lines.pop()
-
   }
 
   // Add new empty lines

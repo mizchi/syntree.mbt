@@ -3,6 +3,7 @@ package "mizchi/syntree/html"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct HtmlToken {
   token_type : HtmlTokenType
   from : Int
   to : Int
-}
-pub impl Eq for HtmlToken
+} derive(Eq, @debug.Debug)
 pub impl Show for HtmlToken
 
 pub(all) enum HtmlTokenType {
@@ -37,8 +37,7 @@ pub(all) enum HtmlTokenType {
   Doctype
   CData
   Error
-}
-pub impl Eq for HtmlTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for HtmlTokenType
 
 pub(all) struct HtmlTokenizer {
@@ -52,4 +51,3 @@ pub fn HtmlTokenizer::tokenize_all(Self) -> Array[HtmlToken]
 // Type aliases
 
 // Traits
-

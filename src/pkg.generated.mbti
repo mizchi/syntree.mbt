@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "mizchi/syntree"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
 pub fn escape_html(String) -> String
 
@@ -46,18 +50,16 @@ pub(all) enum HighlightTag {
   TagBracket
   Invalid
   None
-}
+} derive(Eq, @debug.Debug)
 pub fn HighlightTag::to_class(Self) -> String
-pub impl Eq for HighlightTag
 pub impl Show for HighlightTag
 
 pub(all) struct HighlightToken {
   from : Int
   to : Int
   tag : HighlightTag
-}
+} derive(Eq, @debug.Debug)
 pub fn HighlightToken::new(Int, Int, HighlightTag) -> Self
-pub impl Eq for HighlightToken
 pub impl Show for HighlightToken
 
 pub(all) struct Highlighter {
@@ -85,10 +87,9 @@ pub(all) struct NodeType {
   id : Int
   name : String
   is_error : Bool
-}
+} derive(Eq, @debug.Debug)
 pub fn NodeType::error(Int) -> Self
 pub fn NodeType::new(Int, String) -> Self
-pub impl Eq for NodeType
 pub impl Show for NodeType
 
 pub(all) enum Tree {
@@ -134,4 +135,3 @@ pub fn TreeCursor::to(Self) -> Int
 // Type aliases
 
 // Traits
-

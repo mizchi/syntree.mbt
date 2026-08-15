@@ -3,6 +3,7 @@ package "mizchi/syntree/swift"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct SwiftToken {
   token_type : SwiftTokenType
   from : Int
   to : Int
-}
-pub impl Eq for SwiftToken
+} derive(Eq, @debug.Debug)
 pub impl Show for SwiftToken
 
 pub(all) enum SwiftTokenType {
@@ -58,8 +58,7 @@ pub(all) enum SwiftTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for SwiftTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for SwiftTokenType
 
 pub(all) struct SwiftTokenizer {
@@ -73,4 +72,3 @@ pub fn SwiftTokenizer::tokenize_all(Self) -> Array[SwiftToken]
 // Type aliases
 
 // Traits
-

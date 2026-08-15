@@ -27,14 +27,57 @@ pub(all) enum SqlTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SqlTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    DMLKeyword => logger.write_string("DMLKeyword")
+    DDLKeyword => logger.write_string("DDLKeyword")
+    Function => logger.write_string("Function")
+    DataType => logger.write_string("DataType")
+    String => logger.write_string("String")
+    Number => logger.write_string("Number")
+    Null => logger.write_string("Null")
+    Identifier => logger.write_string("Identifier")
+    QuotedIdent => logger.write_string("QuotedIdent")
+    Parameter => logger.write_string("Parameter")
+    Operator => logger.write_string("Operator")
+    Comparison => logger.write_string("Comparison")
+    Logical => logger.write_string("Logical")
+    Assignment => logger.write_string("Assignment")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    Comma => logger.write_string("Comma")
+    Semicolon => logger.write_string("Semicolon")
+    Dot => logger.write_string("Dot")
+    Star => logger.write_string("Star")
+    LineComment => logger.write_string("LineComment")
+    BlockComment => logger.write_string("BlockComment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct SqlToken {
   token_type : SqlTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SqlToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct SqlTokenizer {

@@ -3,6 +3,7 @@ package "mizchi/syntree/rust"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct RustToken {
   token_type : RustTokenType
   from : Int
   to : Int
-}
-pub impl Eq for RustToken
+} derive(Eq, @debug.Debug)
 pub impl Show for RustToken
 
 pub(all) enum RustTokenType {
@@ -52,8 +52,7 @@ pub(all) enum RustTokenType {
   BlockComment
   DocComment
   Error
-}
-pub impl Eq for RustTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for RustTokenType
 
 pub(all) struct RustTokenizer {
@@ -67,4 +66,3 @@ pub fn RustTokenizer::tokenize_all(Self) -> Array[RustToken]
 // Type aliases
 
 // Traits
-

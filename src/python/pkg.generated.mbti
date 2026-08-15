@@ -3,6 +3,7 @@ package "mizchi/syntree/python"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct PythonToken {
   token_type : PythonTokenType
   from : Int
   to : Int
-}
-pub impl Eq for PythonToken
+} derive(Eq, @debug.Debug)
 pub impl Show for PythonToken
 
 pub(all) enum PythonTokenType {
@@ -55,8 +55,7 @@ pub(all) enum PythonTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for PythonTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for PythonTokenType
 
 pub(all) struct PythonTokenizer {
@@ -70,4 +69,3 @@ pub fn PythonTokenizer::tokenize_all(Self) -> Array[PythonToken]
 // Type aliases
 
 // Traits
-

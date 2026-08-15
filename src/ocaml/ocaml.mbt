@@ -34,14 +34,64 @@ pub(all) enum OcamlTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for OcamlTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    ModuleKeyword => logger.write_string("ModuleKeyword")
+    String => logger.write_string("String")
+    Char => logger.write_string("Char")
+    Number => logger.write_string("Number")
+    Identifier => logger.write_string("Identifier")
+    TypeIdent => logger.write_string("TypeIdent")
+    ModuleName => logger.write_string("ModuleName")
+    Constructor => logger.write_string("Constructor")
+    Label => logger.write_string("Label")
+    Operator => logger.write_string("Operator")
+    Comparison => logger.write_string("Comparison")
+    Logical => logger.write_string("Logical")
+    ListCons => logger.write_string("ListCons")
+    Concat => logger.write_string("Concat")
+    Arrow => logger.write_string("Arrow")
+    Pipe => logger.write_string("Pipe")
+    Semicolon2 => logger.write_string("Semicolon2")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Comma => logger.write_string("Comma")
+    Semicolon => logger.write_string("Semicolon")
+    Colon => logger.write_string("Colon")
+    Dot => logger.write_string("Dot")
+    Underscore => logger.write_string("Underscore")
+    Comment => logger.write_string("Comment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct OcamlToken {
   token_type : OcamlTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for OcamlToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct OcamlTokenizer {

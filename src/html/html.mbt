@@ -29,7 +29,26 @@ pub(all) enum HtmlTokenType {
 
   // Error
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HtmlTokenType with fn output(self, logger) {
+  match self {
+    TagOpen => logger.write_string("TagOpen")
+    TagClose => logger.write_string("TagClose")
+    TagSlashClose => logger.write_string("TagSlashClose")
+    TagOpenEnd => logger.write_string("TagOpenEnd")
+    TagName => logger.write_string("TagName")
+    AttrName => logger.write_string("AttrName")
+    AttrEquals => logger.write_string("AttrEquals")
+    AttrValue => logger.write_string("AttrValue")
+    Text => logger.write_string("Text")
+    Comment => logger.write_string("Comment")
+    Doctype => logger.write_string("Doctype")
+    CData => logger.write_string("CData")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // HTML Token
@@ -41,7 +60,18 @@ pub(all) struct HtmlToken {
   token_type : HtmlTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for HtmlToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // HTML Tokenizer

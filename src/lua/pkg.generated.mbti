@@ -3,6 +3,7 @@ package "mizchi/syntree/lua"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct LuaToken {
   token_type : LuaTokenType
   from : Int
   to : Int
-}
-pub impl Eq for LuaToken
+} derive(Eq, @debug.Debug)
 pub impl Show for LuaToken
 
 pub(all) enum LuaTokenType {
@@ -54,8 +54,7 @@ pub(all) enum LuaTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for LuaTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for LuaTokenType
 
 pub(all) struct LuaTokenizer {
@@ -69,4 +68,3 @@ pub fn LuaTokenizer::tokenize_all(Self) -> Array[LuaToken]
 // Type aliases
 
 // Traits
-

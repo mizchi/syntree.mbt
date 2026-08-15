@@ -3,6 +3,7 @@ package "mizchi/syntree/mdx"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -15,16 +16,14 @@ pub fn mdx_highlighter() -> @syntree.Highlighter
 // Errors
 
 // Types and methods
-type MdxContext
-pub impl Eq for MdxContext
+type MdxContext derive(Eq, @debug.Debug)
 pub impl Show for MdxContext
 
 pub(all) struct MdxToken {
   token_type : MdxTokenType
   from : Int
   to : Int
-}
-pub impl Eq for MdxToken
+} derive(Eq, @debug.Debug)
 pub impl Show for MdxToken
 
 pub(all) enum MdxTokenType {
@@ -81,8 +80,7 @@ pub(all) enum MdxTokenType {
   Whitespace
   Newline
   Error
-}
-pub impl Eq for MdxTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for MdxTokenType
 
 pub(all) struct MdxTokenizer {
@@ -96,4 +94,3 @@ pub fn MdxTokenizer::tokenize_all(Self) -> Array[MdxToken]
 // Type aliases
 
 // Traits
-

@@ -35,14 +35,65 @@ pub(all) enum SwiftTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SwiftTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    DeclKeyword => logger.write_string("DeclKeyword")
+    Modifier => logger.write_string("Modifier")
+    String => logger.write_string("String")
+    MultilineString => logger.write_string("MultilineString")
+    StringInterp => logger.write_string("StringInterp")
+    Number => logger.write_string("Number")
+    Bool => logger.write_string("Bool")
+    Identifier => logger.write_string("Identifier")
+    TypeName => logger.write_string("TypeName")
+    Attribute => logger.write_string("Attribute")
+    Operator => logger.write_string("Operator")
+    Comparison => logger.write_string("Comparison")
+    Assignment => logger.write_string("Assignment")
+    Logical => logger.write_string("Logical")
+    Range => logger.write_string("Range")
+    Optional => logger.write_string("Optional")
+    Arrow => logger.write_string("Arrow")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Comma => logger.write_string("Comma")
+    Colon => logger.write_string("Colon")
+    Semicolon => logger.write_string("Semicolon")
+    Dot => logger.write_string("Dot")
+    LineComment => logger.write_string("LineComment")
+    BlockComment => logger.write_string("BlockComment")
+    DocComment => logger.write_string("DocComment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct SwiftToken {
   token_type : SwiftTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for SwiftToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct SwiftTokenizer {

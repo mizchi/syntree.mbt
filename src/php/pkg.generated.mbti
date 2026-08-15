@@ -3,6 +3,7 @@ package "mizchi/syntree/php"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct PhpToken {
   token_type : PhpTokenType
   from : Int
   to : Int
-}
-pub impl Eq for PhpToken
+} derive(Eq, @debug.Debug)
 pub impl Show for PhpToken
 
 pub(all) enum PhpTokenType {
@@ -66,8 +66,7 @@ pub(all) enum PhpTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for PhpTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for PhpTokenType
 
 pub(all) struct PhpTokenizer {
@@ -81,4 +80,3 @@ pub fn PhpTokenizer::tokenize_all(Self) -> Array[PhpToken]
 // Type aliases
 
 // Traits
-

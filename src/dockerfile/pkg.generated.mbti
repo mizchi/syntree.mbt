@@ -3,6 +3,7 @@ package "mizchi/syntree/dockerfile"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct DockerfileToken {
   token_type : DockerfileTokenType
   from : Int
   to : Int
-}
-pub impl Eq for DockerfileToken
+} derive(Eq, @debug.Debug)
 pub impl Show for DockerfileToken
 
 pub(all) enum DockerfileTokenType {
@@ -37,8 +37,7 @@ pub(all) enum DockerfileTokenType {
   Newline
   Continuation
   Unknown
-}
-pub impl Eq for DockerfileTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for DockerfileTokenType
 
 pub(all) struct DockerfileTokenizer {
@@ -52,4 +51,3 @@ pub fn DockerfileTokenizer::tokenize_all(Self) -> Array[DockerfileToken]
 // Type aliases
 
 // Traits
-

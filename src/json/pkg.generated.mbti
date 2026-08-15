@@ -3,6 +3,7 @@ package "mizchi/syntree/json"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -37,10 +38,9 @@ pub(all) enum JsonNodeId {
   Comma
   PropertyName
   Error
-}
+} derive(Eq, @debug.Debug)
 pub fn JsonNodeId::from_int(Int) -> Self
 pub fn JsonNodeId::to_int(Self) -> Int
-pub impl Eq for JsonNodeId
 pub impl Show for JsonNodeId
 
 pub(all) struct JsonParser {
@@ -62,8 +62,7 @@ pub(all) struct JsonToken {
   node_type : JsonNodeId
   from : Int
   to : Int
-}
-pub impl Eq for JsonToken
+} derive(Eq, @debug.Debug)
 pub impl Show for JsonToken
 
 pub(all) struct JsonTokenizer {
@@ -85,4 +84,3 @@ pub fn JsonTokenizer::tokenize_all(Self) -> Array[JsonToken]
 // Type aliases
 
 // Traits
-

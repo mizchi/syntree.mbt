@@ -35,14 +35,65 @@ pub(all) enum JavaTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for JavaTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    Modifier => logger.write_string("Modifier")
+    String => logger.write_string("String")
+    TextBlock => logger.write_string("TextBlock")
+    Char => logger.write_string("Char")
+    Number => logger.write_string("Number")
+    Identifier => logger.write_string("Identifier")
+    TypeKeyword => logger.write_string("TypeKeyword")
+    TypeName => logger.write_string("TypeName")
+    Annotation => logger.write_string("Annotation")
+    Operator => logger.write_string("Operator")
+    Comparison => logger.write_string("Comparison")
+    Assignment => logger.write_string("Assignment")
+    Logical => logger.write_string("Logical")
+    Bitwise => logger.write_string("Bitwise")
+    Increment => logger.write_string("Increment")
+    Ternary => logger.write_string("Ternary")
+    Arrow => logger.write_string("Arrow")
+    DoubleColon => logger.write_string("DoubleColon")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Comma => logger.write_string("Comma")
+    Semicolon => logger.write_string("Semicolon")
+    Dot => logger.write_string("Dot")
+    LineComment => logger.write_string("LineComment")
+    BlockComment => logger.write_string("BlockComment")
+    DocComment => logger.write_string("DocComment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct JavaToken {
   token_type : JavaTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for JavaToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct JavaTokenizer {

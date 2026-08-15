@@ -19,14 +19,49 @@ pub(all) enum MakefileTokenType {
   Newline
   Tab
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MakefileTokenType with fn output(self, logger) {
+  match self {
+    Target => logger.write_string("Target")
+    Prerequisite => logger.write_string("Prerequisite")
+    Variable => logger.write_string("Variable")
+    VariableRef => logger.write_string("VariableRef")
+    Function => logger.write_string("Function")
+    String => logger.write_string("String")
+    Operator => logger.write_string("Operator")
+    Assignment => logger.write_string("Assignment")
+    Colon => logger.write_string("Colon")
+    Semicolon => logger.write_string("Semicolon")
+    Pipe => logger.write_string("Pipe")
+    Recipe => logger.write_string("Recipe")
+    Comment => logger.write_string("Comment")
+    Directive => logger.write_string("Directive")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Tab => logger.write_string("Tab")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct MakefileToken {
   token_type : MakefileTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for MakefileToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct MakefileTokenizer {
@@ -189,7 +224,7 @@ pub fn MakefileTokenizer::next_token(
   }
 
   // Whitespace (not tab at line start)
-  if c == ' ' || (c == '\t' && not(self.at_line_start)) {
+  if c == ' ' || (c == '\t' && !self.at_line_start) {
     while self.pos < self.len {
       let ch = self.chars[self.pos]
       if ch == ' ' || ch == '\t' {

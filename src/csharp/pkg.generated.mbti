@@ -3,6 +3,7 @@ package "mizchi/syntree/csharp"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct CsharpToken {
   token_type : CsharpTokenType
   from : Int
   to : Int
-}
-pub impl Eq for CsharpToken
+} derive(Eq, @debug.Debug)
 pub impl Show for CsharpToken
 
 pub(all) enum CsharpTokenType {
@@ -65,8 +65,7 @@ pub(all) enum CsharpTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for CsharpTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for CsharpTokenType
 
 pub(all) struct CsharpTokenizer {
@@ -80,4 +79,3 @@ pub fn CsharpTokenizer::tokenize_all(Self) -> Array[CsharpToken]
 // Type aliases
 
 // Traits
-

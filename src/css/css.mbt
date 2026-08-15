@@ -47,7 +47,42 @@ pub(all) enum CssTokenType {
 
   // Error
   Error
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CssTokenType with fn output(self, logger) {
+  match self {
+    TagSelector => logger.write_string("TagSelector")
+    ClassSelector => logger.write_string("ClassSelector")
+    IdSelector => logger.write_string("IdSelector")
+    PseudoClass => logger.write_string("PseudoClass")
+    PseudoElement => logger.write_string("PseudoElement")
+    AttrSelector => logger.write_string("AttrSelector")
+    UniversalSelector => logger.write_string("UniversalSelector")
+    Combinator => logger.write_string("Combinator")
+    AtKeyword => logger.write_string("AtKeyword")
+    PropertyName => logger.write_string("PropertyName")
+    PropertyValue => logger.write_string("PropertyValue")
+    Number => logger.write_string("Number")
+    Unit => logger.write_string("Unit")
+    Color => logger.write_string("Color")
+    String => logger.write_string("String")
+    Url => logger.write_string("Url")
+    Function => logger.write_string("Function")
+    Important => logger.write_string("Important")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    Colon => logger.write_string("Colon")
+    Semicolon => logger.write_string("Semicolon")
+    Comma => logger.write_string("Comma")
+    Comment => logger.write_string("Comment")
+    Error => logger.write_string("Error")
+  }
+}
 
 // =============================================================================
 // CSS Token
@@ -59,7 +94,18 @@ pub(all) struct CssToken {
   token_type : CssTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for CssToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 // =============================================================================
 // CSS Tokenizer
@@ -389,7 +435,7 @@ pub fn CssTokenizer::tokenize_all(self : CssTokenizer) -> Array[CssToken] {
           } else {
             tokens.push({ token_type: PseudoElement, from: start, to: self.pos })
           }
-        } else if self.in_block && not(self.after_colon) {
+        } else if self.in_block && !self.after_colon {
           // Property-value separator
           let start = self.pos
           self.pos += 1
@@ -446,7 +492,7 @@ pub fn CssTokenizer::tokenize_all(self : CssTokenizer) -> Array[CssToken] {
     }
 
     // Class selector
-    if c == '.' && not(self.after_colon) {
+    if c == '.' && !self.after_colon {
       let start = self.pos
       self.pos += 1
       if self.pos < self.len && is_ident_start(self.chars[self.pos]) {

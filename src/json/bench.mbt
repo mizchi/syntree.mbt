@@ -347,7 +347,6 @@ test "tree: cursor traversal 50 items" (b : @bench.T) {
           n += traverse(c)
         }
         let _ = c.parent()
-
       }
       n
     }

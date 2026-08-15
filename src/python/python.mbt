@@ -34,14 +34,62 @@ pub(all) enum PythonTokenType {
   Whitespace
   Newline
   Unknown
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PythonTokenType with fn output(self, logger) {
+  match self {
+    Keyword => logger.write_string("Keyword")
+    String => logger.write_string("String")
+    FString => logger.write_string("FString")
+    Number => logger.write_string("Number")
+    Identifier => logger.write_string("Identifier")
+    Decorator => logger.write_string("Decorator")
+    BuiltinFunc => logger.write_string("BuiltinFunc")
+    BuiltinType => logger.write_string("BuiltinType")
+    ClassName => logger.write_string("ClassName")
+    Operator => logger.write_string("Operator")
+    Comparison => logger.write_string("Comparison")
+    Assignment => logger.write_string("Assignment")
+    Logical => logger.write_string("Logical")
+    Bitwise => logger.write_string("Bitwise")
+    Walrus => logger.write_string("Walrus")
+    Arrow => logger.write_string("Arrow")
+    ParenOpen => logger.write_string("ParenOpen")
+    ParenClose => logger.write_string("ParenClose")
+    BracketOpen => logger.write_string("BracketOpen")
+    BracketClose => logger.write_string("BracketClose")
+    BraceOpen => logger.write_string("BraceOpen")
+    BraceClose => logger.write_string("BraceClose")
+    Comma => logger.write_string("Comma")
+    Colon => logger.write_string("Colon")
+    Semicolon => logger.write_string("Semicolon")
+    Dot => logger.write_string("Dot")
+    Ellipsis => logger.write_string("Ellipsis")
+    Comment => logger.write_string("Comment")
+    Whitespace => logger.write_string("Whitespace")
+    Newline => logger.write_string("Newline")
+    Unknown => logger.write_string("Unknown")
+  }
+}
 
 ///|
 pub(all) struct PythonToken {
   token_type : PythonTokenType
   from : Int
   to : Int
-} derive(Eq, Show)
+} derive(Eq, Debug)
+
+///|
+pub impl Show for PythonToken with fn output(self, logger) {
+  logger.write_string("{token_type: ")
+  self.token_type.output(logger)
+  logger.write_string(", from: ")
+  logger.write_string(self.from.to_string())
+  logger.write_string(", to: ")
+  logger.write_string(self.to.to_string())
+  logger.write_string("}")
+}
 
 ///|
 pub(all) struct PythonTokenizer {

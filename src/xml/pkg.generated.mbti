@@ -3,6 +3,7 @@ package "mizchi/syntree/xml"
 
 import {
   "mizchi/syntree",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -19,8 +20,7 @@ pub(all) struct XmlToken {
   token_type : XmlTokenType
   from : Int
   to : Int
-}
-pub impl Eq for XmlToken
+} derive(Eq, @debug.Debug)
 pub impl Show for XmlToken
 
 pub(all) enum XmlTokenType {
@@ -40,8 +40,7 @@ pub(all) enum XmlTokenType {
   Whitespace
   Newline
   Unknown
-}
-pub impl Eq for XmlTokenType
+} derive(Eq, @debug.Debug)
 pub impl Show for XmlTokenType
 
 pub(all) struct XmlTokenizer {
@@ -55,4 +54,3 @@ pub fn XmlTokenizer::tokenize_all(Self) -> Array[XmlToken]
 // Type aliases
 
 // Traits
-
